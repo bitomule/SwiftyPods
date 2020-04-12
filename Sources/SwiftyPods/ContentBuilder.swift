@@ -1,25 +1,23 @@
 import Foundation
 
 protocol TemplateContextBuilder {
-    func setWorkSpaceName(_ workspaceName: String) -> Self
     func build() -> [String: String]
 }
 
 final class ContentBuilder: TemplateContextBuilder {
-    private enum Constant {
-        static let defaultWorkspaceName = "WorkspaceName"
-    }
-    private var workspaceName: String?
-    
-    func setWorkSpaceName(_ workspaceName: String) -> Self {
-        self.workspaceName = workspaceName
-        return self
+    enum Constant {
+        static let propertyName = "pods"
     }
     
     func build() -> [String: String] {
+        let lines = podfile.targets.map {
+            $0.dependencies.map {
+                $0.toString()
+            }.joined(separator: "\n")
+        }
+        .joined(separator: "\n")
         return [
-            "workspaceName": workspaceName ?? Constant.defaultWorkspaceName,
-            "pods": "hello"
+            Constant.propertyName: lines
         ]
     }
 }

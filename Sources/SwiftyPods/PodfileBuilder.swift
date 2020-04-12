@@ -5,18 +5,12 @@ final class PodfileBuilder {
     private let templateRenderer = TemplateRenderer()
     private let contextBuilder: TemplateContextBuilder = ContentBuilder()
     
-    func build(template: String, workspaceName: String) throws {
+    func build(template: String) throws {
         try templateRenderer.render(
             templatePath: templateArgumentParser.getPath(template: template),
             templateFileName: templateArgumentParser.getTemplateName(template: template),
-            context: getContext(workspaceName: workspaceName),
+            context: contextBuilder.build(),
             targetPath: URL(fileURLWithPath: "")
         )
-    }
-    
-    private func getContext(workspaceName: String) -> [String: String] {
-        contextBuilder
-        .setWorkSpaceName(workspaceName)
-        .build()
     }
  }

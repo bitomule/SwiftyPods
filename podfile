@@ -1,9 +1,5 @@
-source 'https://cdn.cocoapods.org/'
-
 platform :ios, '13.0'
-install! 'cocoapods'
 inhibit_all_warnings!
 
-workspace 'defaultWorkspace'
-
-hello
+pod 'ExamplePod', '1.2.3'
+pod 'ExamplePod2', '3.2.1'
