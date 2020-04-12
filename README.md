@@ -1,0 +1,2 @@
+# SwiftyPods
+Type safe pods
