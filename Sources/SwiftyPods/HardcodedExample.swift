@@ -14,11 +14,17 @@ import Foundation
 //)
 
 let podfile = Podfile {
-    Target(name: "TargetName") {
-        Dependency(name: "Superpod", podName: "podName", version: "1.2.3")
-        Target(name: "ChildTarget") {
-            CustomAttribute("a")
-        }
-    }
+    Target(
+        name: "MainApp",
+        dependencies: [
+            Dependency(name: "ExamplePod", podName: "ExamplePod", version: "1.2.3"),
+            Dependency(name: "ExamplePod2", podName: "ExamplePod2", version: "3.2.1")
+        ],
+        childTargets: [
+            Target(name: "Tests", dependencies: [
+                Dependency(name: "TestPod", podName: "TestPod", version: "4.2.1")
+                ]
+            )
+        ]
+    )
 }
-

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Dependency: TargetAttribute {
+public struct Dependency {
     public let name: String
     public let podName: String
     public let version: String
@@ -12,17 +12,10 @@ public struct Dependency: TargetAttribute {
     }
 }
 
-public struct CustomAttribute: TargetAttribute {
+public struct CustomAttribute {
     public let value: String
     
     init(_ value: String) {
         self.value = value
-    }
-}
-
-@_functionBuilder
-struct DependencyBuilder {
-    static func buildBlock(_ segments: TargetAttribute...) -> [TargetAttribute] {
-        segments
     }
 }

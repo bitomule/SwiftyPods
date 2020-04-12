@@ -3,7 +3,7 @@ import Foundation
 public struct Podfile {
     public let targets: [Target]
     
-    init(targets: [Target]) {
+    private init(targets: [Target]) {
         self.targets = targets
     }
 }
@@ -13,33 +13,8 @@ extension Podfile {
         self.init(targets: content())
     }
     
-    public init(@TargetBuilder _ content: () -> Target) {
+    public init( @TargetBuilder _ content: () -> Target) {
         self.init(targets: [content()])
-    }
-}
-
-public protocol TargetAttribute {}
-
-public struct Target: TargetAttribute {
-    public let name: String
-    public let attributes: [TargetAttribute]
-    
-    public init(
-        name: String,
-        attributes: [TargetAttribute]
-    ) {
-        self.name = name
-        self.attributes = attributes
-    }
-}
-
-extension Target {
-    public init(name: String, @DependencyBuilder _ content: () -> [TargetAttribute]) {
-        self.init(name: name, attributes: content())
-    }
-    
-    public init(name: String, @DependencyBuilder _ content: () -> TargetAttribute) {
-        self.init(name: name, attributes: [content()])
     }
 }
 
@@ -47,5 +22,21 @@ extension Target {
 struct TargetBuilder {
     static func buildBlock(_ segments: Target...) -> [Target] {
         segments
+    }
+}
+
+public struct Target {
+    public let name: String
+    public let dependencies: [Dependency]
+    public let childTargets: [Target]
+    
+    public init(
+        name: String,
+        dependencies: [Dependency],
+        childTargets: [Target] = []
+    ) {
+        self.name = name
+        self.dependencies = dependencies
+        self.childTargets = childTargets
     }
 }
