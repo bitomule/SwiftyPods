@@ -1,7 +1,6 @@
 import Foundation
-import PathKit
 
-class TemplateParser {
+class TemplateArgumentParser {
     private enum Constant {
         static let defaultTemplateFileName = "podfile"
     }
@@ -11,12 +10,12 @@ class TemplateParser {
         self.template = template
     }
     
-    func getPath() -> Path {
+    func getPath() -> URL {
         var templateURL = URL(fileURLWithPath: template)
         if templateURL.isFileURL {
             templateURL.deleteLastPathComponent()
         }
-        return Path(stringLiteral: templateURL.relativePath)
+        return templateURL
     }
     
     func getTemplateName() -> String {
