@@ -4,13 +4,8 @@ class TemplateArgumentParser {
     private enum Constant {
         static let defaultTemplateFileName = "podfile"
     }
-    private let template: String
     
-    init(template: String) {
-        self.template = template
-    }
-    
-    func getPath() -> URL {
+    func getPath(template: String) -> URL {
         var templateURL = URL(fileURLWithPath: template)
         if templateURL.isFileURL {
             templateURL.deleteLastPathComponent()
@@ -18,7 +13,7 @@ class TemplateArgumentParser {
         return templateURL
     }
     
-    func getTemplateName() -> String {
+    func getTemplateName(template: String) -> String {
         let templateURL = URL(fileURLWithPath: template)
         guard templateURL.isFileURL else {
             return "\(Constant.defaultTemplateFileName).stencil"
