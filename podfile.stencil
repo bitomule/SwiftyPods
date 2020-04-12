@@ -1,8 +1,4 @@
-source 'https://cdn.cocoapods.org/'
-
 platform :ios, '13.0'
-install! 'cocoapods'
-
-workspace '{{ workspaceName }}'
+inhibit_all_warnings!
 
 {{ pods }}
