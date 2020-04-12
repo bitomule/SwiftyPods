@@ -1,95 +1,9 @@
-################ Global config ################
 source 'https://cdn.cocoapods.org/'
 
-platform :ios, '10.0'
-install! 'cocoapods', :deterministic_uuids => false
+platform :ios, '13.0'
+install! 'cocoapods'
 inhibit_all_warnings!
 
-# FIXME: @machipla For now there's a bug that doesnt allow to use "Precompile bridging header" while using modular headers on a pure objc pods
-# https://github.com/CocoaPods/CocoaPods/issues/7584
-# When this get solved, we must re-enable the "Precompile bridging header" as it speeds up the compile time
-use_modular_headers!
-workspace 'Wallapop'
-plugin 'cocoapods-no-dev-schemes'
+workspace 'defaultWorkspace'
 
-Hola caracola
-
-################ App Extensions ################
-target 'NotificationService' do
-  project 'Wallapop.xcodeproj'
-  shared_pods
-  common_module
-  domain_module
-  rx_swift_pod
-end
-
-# Remove unused languages from Pods
-pre_install do |installer|
-  supported_locales = ['base', 'en', 'english', 'es']
-  delete_unsupported_locales(installer.sandbox.root, supported_locales)
-end
-
-def delete_unsupported_locales(root, supported_locales)
-  Dir.glob(File.join(root, '**', '*.lproj')).each do |bundle|
-    if (!supported_locales.include?(File.basename(bundle, ".lproj").downcase))
-      puts "Removing #{bundle}"
-      FileUtils.rm_rf(bundle)
-    end
-  end
-end
-
-################ Post-Install Scripts ################
-post_install do |installer_representation|
-  # Disable Code Coverage for Pods projects and enforce project's Deployment Target
-  installer_representation.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['CLANG_ENABLE_CODE_COVERAGE'] = 'NO'
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
-      config.build_settings['CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED'] = 'YES'
-      if config.to_s == "Debug"
-        config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
-      else
-        config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
-      end
-    end
-  end
-
-  # Disable MagicalRecord logging
-  target = installer_representation.pods_project.targets.find{|t| t.to_s == "MagicalRecord"}
-  target.build_configurations.each do |config|
-    s = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS']
-    s = [ '$(inherited)' ] if s == nil;
-    s.push('MR_ENABLE_ACTIVE_RECORD_LOGGING=0') if config.to_s == "Debug";
-    config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = s
-  end
-
-  # Work around for FBSnapshotTestCase with static linking.
-  # This is needed because of buggy handling of the differing module and project names.
-  # NOTE: Uncomment to resolve the build failure
-  def merge_and_link_dirs(source, destination)
-  if File.symlink?(source) then
-    return
-  end
-
-  if File.directory?(source) then
-    system "mv #{source}/* #{destination}"
-    system "rmdir #{source}"
-  end
-
-  File.symlink("../#{destination}", source)
-end
-
-headers_dir = installer_representation.config.project_pods_root + 'Headers/'
-
-
-Dir.chdir(headers_dir) do
-  merge_and_link_dirs('Public/FBSnapshotTestCase', 'Public/iOSSnapshotTestCase')
-  merge_and_link_dirs('Private/FBSnapshotTestCase', 'Private/iOSSnapshotTestCase')
-
-  origin_path = headers_dir + 'Private/iOSSnapshotTestCase/*'
-  destination_path = headers_dir + 'Public/FBSnapshotTestCase'
-
-  system "cp -Rf #{origin_path} #{destination_path}"
-end
-
-end
+hello
