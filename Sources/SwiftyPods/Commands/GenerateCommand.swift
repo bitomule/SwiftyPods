@@ -13,6 +13,6 @@ struct Generate: ParsableCommand {
     private let defaultTemplateFileName = "podfile.stencil"
     
     func run() throws {
-        try PodfileBuilder().build(template: template)
+        try GenerateService().run(template: template)
     }
 }

@@ -1,11 +1,11 @@
 import Foundation
 
-final class PodfileBuilder {
+final class GenerateService {
     private let templateArgumentParser = TemplateArgumentParser()
     private let templateRenderer = TemplateRenderer()
     private let contextBuilder: TemplateContextBuilder = ContentBuilder()
     
-    func build(template: String) throws {
+    func run(template: String) throws {
         try templateRenderer.render(
             templatePath: templateArgumentParser.getPath(template: template),
             templateFileName: templateArgumentParser.getTemplateName(template: template),
