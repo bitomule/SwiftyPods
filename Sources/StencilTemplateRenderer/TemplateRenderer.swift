@@ -1,22 +1,34 @@
 import Foundation
 import Stencil
 import PathKit
+import Storage
 
-final class TemplateRenderer {
-    enum Constant {
-        static let fileName = "podfile"
-    }
-    
-    private let storage: FileStoring
-    
-    init(storage: FileStoring = DiskDataSource()){
-        self.storage = storage
-    }
-    
+public protocol StencilTemplateRendering {
     func render(
         templatePath: URL,
         templateFileName: String,
         context: [String: String],
+        targetName: String,
+        targetPath: URL
+    ) throws
+}
+
+public final class StencilTemplateRenderer: StencilTemplateRendering {
+    enum Constant {
+        static let fileName = "podfile"
+    }
+    
+    private let storage: FileSysteming
+    
+    public init(storage: FileSysteming = FileSystem()){
+        self.storage = storage
+    }
+    
+    public func render(
+        templatePath: URL,
+        templateFileName: String,
+        context: [String: String],
+        targetName: String,
         targetPath: URL
     ) throws {
         let fsLoader = FileSystemLoader(paths: [Path(templatePath.relativePath)])

@@ -9,7 +9,9 @@ let package = Package(
         .executable(name: "swiftypods", targets: ["SwiftyPods"]),
         .library(name: "PodsDSL", targets: ["PodsDSL"]),
         .library(name: "TemplateLocator", targets: ["TemplateLocator"]),
-        .library(name: "PackageBuilder", targets: ["PackageBuilder"])
+        .library(name: "PackageBuilder", targets: ["PackageBuilder"]),
+        .library(name: "StencilTemplateRenderer", targets: ["StencilTemplateRenderer"]),
+        .library(name: "Storage", targets: ["Storage"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
@@ -22,7 +24,9 @@ let package = Package(
                 "ArgumentParser",
                 "Stencil",
                 "PodsDSL",
-                "PackageBuilder"
+                "PackageBuilder",
+                "StencilTemplateRenderer",
+                "Storage"
         ]),
         .target(
             name: "PodsDSL",
@@ -36,8 +40,19 @@ let package = Package(
             name: "PackageBuilder",
             dependencies: [
                 "Stencil",
-                "TemplateLocator"
+                "TemplateLocator",
+                "StencilTemplateRenderer",
+                "Storage"
         ]),
+        .target(
+            name: "StencilTemplateRenderer",
+            dependencies: [
+                "Stencil"
+        ]),
+        .target(
+            name: "Storage",
+            dependencies: []
+        ),
         .testTarget(
             name: "SwiftyPodsTests",
             dependencies: ["SwiftyPods"]),

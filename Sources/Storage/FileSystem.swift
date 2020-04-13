@@ -1,19 +1,19 @@
 import Foundation
 
-protocol FileStoring {
+public protocol FileSysteming {
     func saveFile(name: String, path: URL, content: String, overwrite: Bool) throws
 }
 
-final class DiskDataSource: FileStoring {
+public final class FileSystem: FileSysteming {
     private let manager: FileManager
     private let encoding: String.Encoding
     
-    init(manager: FileManager = FileManager.default, encoding: String.Encoding = .utf8) {
+    public init(manager: FileManager = FileManager.default, encoding: String.Encoding = .utf8) {
         self.manager = manager
         self.encoding = encoding
     }
     
-    func saveFile(name: String, path: URL, content: String, overwrite: Bool) throws {
+    public func saveFile(name: String, path: URL, content: String, overwrite: Bool) throws {
         let newFile = path.appendingPathComponent(name).path
         if(overwrite || !manager.fileExists(atPath:newFile)){
             manager.createFile(atPath: newFile, contents: content.data(using: encoding), attributes: nil)
