@@ -20,7 +20,7 @@ extension Podfile {
 
 @_functionBuilder
 struct TargetBuilder {
-    static func buildBlock(_ segments: Target...) -> [Target] {
+    public static func buildBlock(_ segments: Target...) -> [Target] {
         segments
     }
 }

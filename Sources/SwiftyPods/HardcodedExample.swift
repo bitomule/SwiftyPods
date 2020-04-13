@@ -1,4 +1,5 @@
 import Foundation
+import PodsDSL
 
 let podfile = Podfile {
     Target(
