@@ -8,6 +8,7 @@ let package = Package(
     products: [
         .executable(name: "swiftypods", targets: ["SwiftyPods"]),
         .library(name: "PodsDSL", targets: ["PodsDSL"]),
+        .library(name: "TemplateLocator", targets: ["TemplateLocator"]),
         .library(name: "PackageBuilder", targets: ["PackageBuilder"])
     ],
     dependencies: [
@@ -15,8 +16,6 @@ let package = Package(
         .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.13.0")
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SwiftyPods",
             dependencies: [
@@ -30,9 +29,14 @@ let package = Package(
             dependencies: []
         ),
         .target(
+            name: "TemplateLocator",
+            dependencies: []
+        ),
+        .target(
             name: "PackageBuilder",
             dependencies: [
-                "Stencil"
+                "Stencil",
+                "TemplateLocator"
         ]),
         .testTarget(
             name: "SwiftyPodsTests",
