@@ -7,7 +7,8 @@ let package = Package(
     name: "SwiftyPods",
     products: [
         .executable(name: "swiftypods", targets: ["SwiftyPods"]),
-        .library(name: "PodsDSL", targets: ["PodsDSL"])
+        .library(name: "PodsDSL", targets: ["PodsDSL"]),
+        .library(name: "PackageBuilder", targets: ["PackageBuilder"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
@@ -21,11 +22,18 @@ let package = Package(
             dependencies: [
                 "ArgumentParser",
                 "Stencil",
-                "PodsDSL"
+                "PodsDSL",
+                "PackageBuilder"
         ]),
         .target(
             name: "PodsDSL",
-            dependencies: []),
+            dependencies: []
+        ),
+        .target(
+            name: "PackageBuilder",
+            dependencies: [
+                "Stencil"
+        ]),
         .testTarget(
             name: "SwiftyPodsTests",
             dependencies: ["SwiftyPods"]),
