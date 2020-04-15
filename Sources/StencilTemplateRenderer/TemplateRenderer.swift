@@ -38,7 +38,7 @@ public final class StencilTemplateRenderer: StencilTemplateRendering {
     ) throws {
         let environment = Environment()
         let content = try environment.renderTemplate(string: template, context: context)
-        try storage.saveFile(name: Constant.fileName, path: targetPath, content: content, overwrite: true)
+        try storage.saveFile(name: targetName, path: targetPath, content: content, overwrite: true)
     }
     
     public func render(
@@ -51,7 +51,7 @@ public final class StencilTemplateRenderer: StencilTemplateRendering {
         let fsLoader = FileSystemLoader(paths: [templatePath])
         let environment = Environment(loader: fsLoader)
         let content = try environment.renderTemplate(name: fileName(from: templateFile), context: context)
-        try storage.saveFile(name: Constant.fileName, path: targetPath, content: content, overwrite: true)
+        try storage.saveFile(name: targetName, path: targetPath, content: content, overwrite: true)
     }
     
     private func filePath(from url: URL) -> String {
