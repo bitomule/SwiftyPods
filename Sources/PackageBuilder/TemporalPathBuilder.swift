@@ -15,7 +15,7 @@ public final class TemporalPathBuilder: TemporalPathBuilding {
         let uuid = UUID().uuidString
         let tmpPath = "tmp/" + uuid + "/"
         let newPath = path.appendingPathComponent(tmpPath, isDirectory: true)
-        try FileManager.default.createDirectory(atPath: newPath.relativePath, withIntermediateDirectories: true, attributes: nil)
+        try manager.createDirectory(atPath: newPath.relativePath, withIntermediateDirectories: true, attributes: nil)
         return newPath
     }
 }

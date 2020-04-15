@@ -36,6 +36,15 @@
           "revision": "8d31a0905c346a45c87773ad50862b5b3df8dff6",
           "version": "0.0.4"
         }
+      },
+      {
+        "package": "ShellInterface",
+        "repositoryURL": "https://github.com/hectr/swift-shell-interface",
+        "state": {
+          "branch": null,
+          "revision": "0e196e919ba13128d1b161dbb6024902b0385fdd",
+          "version": "0.3.0"
+        }
       }
     ]
   },

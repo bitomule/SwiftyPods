@@ -13,6 +13,6 @@ public final class PackageManifestBuilder: PackageManifestBuilding {
     }
     
     public func build(at path: URL) throws {
-        try templateRenderer.render(template: packageTemplate, context: ["packageName": "SwiftyPodsTemporalProject"], targetName: "package.swift", targetPath: path)
+        try templateRenderer.render(template: packageTemplate, context: ["packageName": Constants.packageName], targetName: Constants.packageFileName, targetPath: path)
     }
 }

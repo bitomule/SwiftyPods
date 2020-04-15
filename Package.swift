@@ -8,14 +8,11 @@ let package = Package(
     products: [
         .executable(name: "swiftypods", targets: ["SwiftyPods"]),
         .library(name: "PodsDSL", targets: ["PodsDSL"]),
-        .library(name: "TemplateLocator", targets: ["TemplateLocator"]),
-        .library(name: "PackageBuilder", targets: ["PackageBuilder"]),
-        .library(name: "StencilTemplateRenderer", targets: ["StencilTemplateRenderer"]),
-        .library(name: "Storage", targets: ["Storage"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
-        .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.13.0")
+        .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.13.0"),
+        .package(url: "https://github.com/hectr/swift-shell-interface", from: "0.0.2")
     ],
     targets: [
         .target(
@@ -42,7 +39,8 @@ let package = Package(
                 "Stencil",
                 "TemplateLocator",
                 "StencilTemplateRenderer",
-                "Storage"
+                "Storage",
+                "ShellInterface"
         ]),
         .target(
             name: "StencilTemplateRenderer",

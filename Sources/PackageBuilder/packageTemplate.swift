@@ -7,7 +7,7 @@ import PackageDescription
 let package = Package(
     name: "{{packageName}}",
     products: [
-        .executable(name: "{{packageName}}", targets: [{{packageName}}]),],
+        .executable(name: "{{packageName}}", targets: ["{{packageName}}"]),],
     dependencies: [
         .package(url: "https://github.com/bitomule/SwiftyPods", from: "0.0.1")
     ],
