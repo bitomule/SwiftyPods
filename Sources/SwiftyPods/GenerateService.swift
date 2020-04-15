@@ -20,12 +20,28 @@ final class GenerateService {
     }
     
     func run(template: String) throws {
-        try templateRenderer.render(
-            templatePath: templateArgumentParser.getPath(template: template),
-            templateFileName: templateArgumentParser.getTemplateName(template: template),
-            context: contextBuilder.build(),
-            targetName: Constant.templateFileName,
-            targetPath: URL(fileURLWithPath: "")
-        )
+        if let templateURL = templateArgumentParser.getTemplateName(template: template) {
+            try templateRenderer.render(
+                templateFile: templateURL,
+                context: contextBuilder.build(),
+                targetName: Constant.templateFileName,
+                targetPath: URL(fileURLWithPath: "")
+            )
+        } else {
+            try templateRenderer.render(
+                template: podfileTemplate,
+                context: contextBuilder.build(),
+                targetName: Constant.templateFileName,
+                targetPath: URL(fileURLWithPath: "")
+            )
+        }
+        
     }
  }
+
+private let podfileTemplate = """
+platform :ios, '13.0'
+inhibit_all_warnings!
+
+{{ pods }}
+"""

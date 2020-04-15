@@ -1,12 +1,18 @@
 import Foundation
 import Stencil
-import PathKit
 import Storage
+import PathKit
 
 public protocol StencilTemplateRendering {
     func render(
-        templatePath: URL,
-        templateFileName: String,
+        template: String,
+        context: [String: String],
+        targetName: String,
+        targetPath: URL
+    ) throws
+    
+    func render(
+        templateFile: URL,
         context: [String: String],
         targetName: String,
         targetPath: URL
@@ -25,16 +31,34 @@ public final class StencilTemplateRenderer: StencilTemplateRendering {
     }
     
     public func render(
-        templatePath: URL,
-        templateFileName: String,
+        template: String,
         context: [String: String],
         targetName: String,
         targetPath: URL
     ) throws {
-        let fsLoader = FileSystemLoader(paths: [Path(templatePath.relativePath)])
-        let environment = Environment(loader: fsLoader)
-        
-        let content = try environment.renderTemplate(name: templateFileName, context: context)
+        let environment = Environment()
+        let content = try environment.renderTemplate(string: template, context: context)
         try storage.saveFile(name: Constant.fileName, path: targetPath, content: content, overwrite: true)
+    }
+    
+    public func render(
+        templateFile: URL,
+        context: [String: String],
+        targetName: String,
+        targetPath: URL
+    ) throws {
+        let templatePath = Path(filePath(from: templateFile))
+        let fsLoader = FileSystemLoader(paths: [templatePath])
+        let environment = Environment(loader: fsLoader)
+        let content = try environment.renderTemplate(name: fileName(from: templateFile), context: context)
+        try storage.saveFile(name: Constant.fileName, path: targetPath, content: content, overwrite: true)
+    }
+    
+    private func filePath(from url: URL) -> String {
+        url.deletingLastPathComponent().relativeString
+    }
+    
+    private func fileName(from url: URL) -> String {
+        url.lastPathComponent
     }
 }

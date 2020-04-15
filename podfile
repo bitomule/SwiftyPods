@@ -1,5 +1,0 @@
-platform :ios, '13.0'
-inhibit_all_warnings!
-
-pod 'ExamplePod', '1.2.3'
-pod 'ExamplePod2', '3.2.1'

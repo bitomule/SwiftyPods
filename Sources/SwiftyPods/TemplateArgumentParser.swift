@@ -1,23 +1,17 @@
 import Foundation
 
 class TemplateArgumentParser {
-    private enum Constant {
-        static let defaultTemplateFileName = "podfile"
+    private let manager: FileManager
+    
+    init(manager: FileManager = FileManager.default) {
+        self.manager = manager
     }
     
-    func getPath(template: String) -> URL {
-        var templateURL = URL(fileURLWithPath: template)
-        if templateURL.isFileURL {
-            templateURL.deleteLastPathComponent()
+    func getTemplateName(template: String) -> URL? {
+        let templateURL = URL(fileURLWithPath: template)
+        guard templateURL.isFileURL, manager.fileExists(atPath: templateURL.relativeString) else {
+            return nil
         }
         return templateURL
-    }
-    
-    func getTemplateName(template: String) -> String {
-        let templateURL = URL(fileURLWithPath: template)
-        guard templateURL.isFileURL else {
-            return "\(Constant.defaultTemplateFileName).stencil"
-        }
-        return "\(templateURL.lastPathComponent).stencil"
     }
 }

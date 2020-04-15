@@ -47,7 +47,8 @@ let package = Package(
         .target(
             name: "StencilTemplateRenderer",
             dependencies: [
-                "Stencil"
+                "Stencil",
+                "Storage"
         ]),
         .target(
             name: "Storage",
