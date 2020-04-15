@@ -39,6 +39,7 @@ public final class PackageBuilder: PackageBuilding {
             link(from: file.path, to: newFilePath.path)
         }
         try manifestBuilder.build(at: temporalPath)
+        try createMainSwift(sourcesPath: sourcesPath)
         open(url: temporalPath)
         return URL(fileURLWithPath: "")
     }
@@ -52,8 +53,6 @@ public final class PackageBuilder: PackageBuilding {
     }
     
     private func link(from: String, to: String) {
-        print(from)
-        print(to)
         let shell = ExecuteCommand()
         let result = shell.execute(command: Constant.symlinkCommand,
                                    arguments: [from, to],
@@ -62,5 +61,10 @@ public final class PackageBuilder: PackageBuilding {
     
     private func createSourcesPath(sourcesPath: URL) throws {
         try FileManager.default.createDirectory(atPath: sourcesPath.relativePath, withIntermediateDirectories: true, attributes: nil)
+    }
+    
+    private func createMainSwift(sourcesPath: URL) throws {
+        let fileUrl = sourcesPath.appendingPathComponent("main.swift")
+        try FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
     }
 }

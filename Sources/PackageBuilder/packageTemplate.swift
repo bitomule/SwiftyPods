@@ -15,7 +15,7 @@ let package = Package(
         .target(
             name: "{{packageName}}",
             dependencies: [
-                "SwiftyPods"
+                "PodsDSL"
         ])
     ]
 )
