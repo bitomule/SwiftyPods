@@ -18,15 +18,18 @@ public final class PackageBuilder: PackageBuilding {
     private let templateLocator: TemplateLocating
     private let temporalPathBuilder: TemporalPathBuilding
     private let manifestBuilder: PackageManifestBuilding
+    private let symlinkBuilder: FileSymlinking
     
     public init(
         templateLocator: TemplateLocating = TemplateLocator(),
         temporalPathBuilder: TemporalPathBuilding = TemporalPathBuilder(),
-        manifestBuilder: PackageManifestBuilding = PackageManifestBuilder()
+        manifestBuilder: PackageManifestBuilding = PackageManifestBuilder(),
+        symlinkBuilder: FileSymlinking = FileSimlinker()
     ) {
         self.templateLocator = templateLocator
         self.temporalPathBuilder = temporalPathBuilder
         self.manifestBuilder = manifestBuilder
+        self.symlinkBuilder = symlinkBuilder
     }
     
     public func build(from path: URL) throws -> URL {
@@ -34,9 +37,9 @@ public final class PackageBuilder: PackageBuilding {
         let files = try templateLocator.findTemplates(at: path)
         let sourcesPath = temporalPath.appendingPathComponent("Sources/").appendingPathComponent("\(Constants.packageName)/")
         try createSourcesPath(sourcesPath: sourcesPath)
-        for file in files {
+        try files.forEach { file in
             let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
-            link(from: file.path, to: newFilePath.path)
+            try symlinkBuilder.linkFile(at: newFilePath, to: file)
         }
         try manifestBuilder.build(at: temporalPath)
         try createMainSwift(sourcesPath: sourcesPath)
@@ -48,15 +51,8 @@ public final class PackageBuilder: PackageBuilding {
     private func open(url: URL) {
         let packageURL = url.appendingPathComponent(Constants.packageFileName)
         let shell = ExecuteCommand()
-        let result = shell.execute(command: Constant.openCommand,
+        _ = shell.execute(command: Constant.openCommand,
                                    arguments: [packageURL.relativeString],
-                                   waitUntilExit: true)
-    }
-    
-    private func link(from: String, to: String) {
-        let shell = ExecuteCommand()
-        _ = shell.execute(command: Constant.symlinkCommand,
-                                   arguments: [from, to],
                                    waitUntilExit: true)
     }
     

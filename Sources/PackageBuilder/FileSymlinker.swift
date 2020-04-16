@@ -1,11 +1,17 @@
 import Foundation
 
-protocol FileSymlinking {
-    func linkFile(at: URL, toFolder: URL)
+public protocol FileSymlinking {
+    func linkFile(at: URL, to: URL) throws
 }
 
-final class FileSimlinker: FileSymlinking {
-    func linkFile(at: URL, toFolder: URL) {
-        // Create symbolic link from file at URL to file at folder
+public final class FileSimlinker: FileSymlinking {
+    private let manager: FileManager
+    
+    public init (manager: FileManager = FileManager.default) {
+        self.manager = manager
+    }
+    
+    public func linkFile(at: URL, to: URL) throws {
+        try manager.createSymbolicLink(at: at, withDestinationURL: to)
     }
 }
