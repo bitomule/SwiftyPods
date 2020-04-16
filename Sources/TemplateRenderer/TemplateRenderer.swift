@@ -3,7 +3,7 @@ import Stencil
 import Storage
 import PathKit
 
-public protocol StencilTemplateRendering {
+public protocol TemplateRendering {
     func render(
         template: String,
         context: [String: String],
@@ -19,7 +19,7 @@ public protocol StencilTemplateRendering {
     ) throws
 }
 
-public final class StencilTemplateRenderer: StencilTemplateRendering {
+public final class TemplateRenderer: TemplateRendering {
     enum Constant {
         static let fileName = "podfile"
     }

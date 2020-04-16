@@ -22,7 +22,7 @@ let package = Package(
                 "Stencil",
                 "PodsDSL",
                 "PackageBuilder",
-                "StencilTemplateRenderer",
+                "TemplateRenderer",
                 "Storage"
         ]),
         .target(
@@ -38,12 +38,12 @@ let package = Package(
             dependencies: [
                 "Stencil",
                 "TemplateLocator",
-                "StencilTemplateRenderer",
+                "TemplateRenderer",
                 "Storage",
                 "ShellInterface"
         ]),
         .target(
-            name: "StencilTemplateRenderer",
+            name: "TemplateRenderer",
             dependencies: [
                 "Stencil",
                 "Storage"

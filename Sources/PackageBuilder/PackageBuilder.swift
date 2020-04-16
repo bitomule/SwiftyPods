@@ -41,6 +41,7 @@ public final class PackageBuilder: PackageBuilding {
         try manifestBuilder.build(at: temporalPath)
         try createMainSwift(sourcesPath: sourcesPath)
         open(url: temporalPath)
+        //waitForUserEnter()
         return URL(fileURLWithPath: "")
     }
     
@@ -54,7 +55,7 @@ public final class PackageBuilder: PackageBuilding {
     
     private func link(from: String, to: String) {
         let shell = ExecuteCommand()
-        let result = shell.execute(command: Constant.symlinkCommand,
+        _ = shell.execute(command: Constant.symlinkCommand,
                                    arguments: [from, to],
                                    waitUntilExit: true)
     }
@@ -65,6 +66,6 @@ public final class PackageBuilder: PackageBuilding {
     
     private func createMainSwift(sourcesPath: URL) throws {
         let fileUrl = sourcesPath.appendingPathComponent("main.swift")
-        try FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
+        FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
     }
 }

@@ -1,14 +1,14 @@
 import Foundation
-import StencilTemplateRenderer
+import TemplateRenderer
 
 public protocol PackageManifestBuilding {
     func build(at path: URL) throws
 }
 
 public final class PackageManifestBuilder: PackageManifestBuilding {
-    private let templateRenderer: StencilTemplateRendering
+    private let templateRenderer: TemplateRendering
     
-    public init(templateRenderer: StencilTemplateRendering = StencilTemplateRenderer()) {
+    public init(templateRenderer: TemplateRendering = TemplateRenderer()) {
         self.templateRenderer = templateRenderer
     }
     

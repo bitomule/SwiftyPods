@@ -1,17 +1,17 @@
 import Foundation
-import StencilTemplateRenderer
+import TemplateRenderer
 
 final class GenerateService {
     private enum Constant {
         static let templateFileName = "podfile"
     }
     private let templateArgumentParser: TemplateArgumentParser
-    private let templateRenderer: StencilTemplateRendering
+    private let templateRenderer: TemplateRendering
     private let contextBuilder: TemplateContextBuilder
     
     init(
         templateArgumentParser: TemplateArgumentParser = TemplateArgumentParser(),
-        templateRenderer: StencilTemplateRendering = StencilTemplateRenderer(),
+        templateRenderer: TemplateRendering = TemplateRenderer(),
         contextBuilder: TemplateContextBuilder = ContentBuilder()
     ) {
         self.templateArgumentParser = templateArgumentParser
