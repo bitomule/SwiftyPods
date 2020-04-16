@@ -44,7 +44,7 @@ public final class PackageBuilder: PackageBuilding {
         try manifestBuilder.build(at: temporalPath)
         try createMainSwift(sourcesPath: sourcesPath)
         open(url: temporalPath)
-        //waitForUserEnter()
+        waitForUserEnter(temporalPath: temporalPathBuilder.getRootTemporalPath())
         return URL(fileURLWithPath: "")
     }
     
@@ -60,5 +60,18 @@ public final class PackageBuilder: PackageBuilding {
     private func createMainSwift(sourcesPath: URL) throws {
         let fileUrl = sourcesPath.appendingPathComponent("main.swift")
         FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
+    }
+    
+    private func waitForUserEnter(temporalPath: String) {
+        print("Opening Package.swift. Press any key to delete temporal package")
+        var ended = false
+        while !ended, let _ = main.stdin.readSome() {
+            ended = true
+            deleteTempFolder(path: temporalPath)
+        }
+    }
+    
+    private func deleteTempFolder(path: String) {
+        try? FileManager.default.removeItem(atPath: path)
     }
 }

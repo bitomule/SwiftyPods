@@ -35,7 +35,6 @@ public final class TemplateRenderer: TemplateRendering {
         targetPath: URL
     ) throws {
         let content = context.reduce(template) { result, dict in
-            print(dict.value)
             return generateFile(template: result, value: dict.value, keyToReplace: dict.key)
         }
         try storage.saveFile(name: targetName, path: targetPath, content: content, overwrite: true)
@@ -48,9 +47,7 @@ public final class TemplateRenderer: TemplateRendering {
         targetPath: URL
     ) throws {
         let template = try storage.getFile(at: templateFile)
-        print(template)
         let content = context.reduce(template) { result, dict in
-            print(dict.value)
             return generateFile(template: result, value: dict.value, keyToReplace: dict.key)
         }
         try storage.saveFile(name: targetName, path: targetPath, content: content, overwrite: true)
