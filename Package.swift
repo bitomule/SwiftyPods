@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
-        .package(url: "https://github.com/hectr/swift-shell-interface", from: "0.0.2")
+        .package(url: "https://github.com/kareman/SwiftShell", from: "5.0.1")
     ],
     targets: [
         .target(
@@ -37,7 +37,7 @@ let package = Package(
                 "TemplateLocator",
                 "TemplateRenderer",
                 "Storage",
-                "ShellInterface"
+                "SwiftShell"
         ]),
         .target(
             name: "TemplateRenderer",

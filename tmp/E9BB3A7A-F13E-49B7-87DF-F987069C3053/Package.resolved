@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser",
+        "state": {
+          "branch": null,
+          "revision": "9f04d1ff1afbccd02279338a2c91e5f27c45e93a",
+          "version": "0.0.5"
+        }
+      },
+      {
+        "package": "ShellInterface",
+        "repositoryURL": "https://github.com/hectr/swift-shell-interface",
+        "state": {
+          "branch": null,
+          "revision": "0e196e919ba13128d1b161dbb6024902b0385fdd",
+          "version": "0.3.0"
+        }
+      },
+      {
+        "package": "SwiftyPods",
+        "repositoryURL": "https://github.com/bitomule/SwiftyPods",
+        "state": {
+          "branch": "master",
+          "revision": "6c3ce190c0f5524b6ca10a3477089b873503637f",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

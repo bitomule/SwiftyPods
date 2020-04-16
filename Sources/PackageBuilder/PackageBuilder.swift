@@ -1,6 +1,6 @@
 import Foundation
 import TemplateLocator
-import ShellInterface
+import SwiftShell
 
 public protocol PackageBuilding {
     func build(from path: URL) throws -> URL
@@ -50,10 +50,7 @@ public final class PackageBuilder: PackageBuilding {
     
     private func open(url: URL) {
         let packageURL = url.appendingPathComponent(Constants.packageFileName)
-        let shell = ExecuteCommand()
-        _ = shell.execute(command: Constant.openCommand,
-                                   arguments: [packageURL.relativeString],
-                                   waitUntilExit: true)
+        run(Constant.openCommand, packageURL.relativeString)
     }
     
     private func createSourcesPath(sourcesPath: URL) throws {
