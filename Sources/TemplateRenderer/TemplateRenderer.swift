@@ -1,7 +1,5 @@
 import Foundation
-import Stencil
 import Storage
-import PathKit
 
 public protocol TemplateRendering {
     func render(
@@ -36,8 +34,10 @@ public final class TemplateRenderer: TemplateRendering {
         targetName: String,
         targetPath: URL
     ) throws {
-        let environment = Environment()
-        let content = try environment.renderTemplate(string: template, context: context)
+        let content = context.reduce(template) { result, dict in
+            print(dict.value)
+            return generateFile(template: result, value: dict.value, keyToReplace: dict.key)
+        }
         try storage.saveFile(name: targetName, path: targetPath, content: content, overwrite: true)
     }
     
@@ -47,11 +47,17 @@ public final class TemplateRenderer: TemplateRendering {
         targetName: String,
         targetPath: URL
     ) throws {
-        let templatePath = Path(filePath(from: templateFile))
-        let fsLoader = FileSystemLoader(paths: [templatePath])
-        let environment = Environment(loader: fsLoader)
-        let content = try environment.renderTemplate(name: fileName(from: templateFile), context: context)
+        let template = try storage.getFile(at: templateFile)
+        print(template)
+        let content = context.reduce(template) { result, dict in
+            print(dict.value)
+            return generateFile(template: result, value: dict.value, keyToReplace: dict.key)
+        }
         try storage.saveFile(name: targetName, path: targetPath, content: content, overwrite: true)
+    }
+    
+    private func generateFile(template: String, value: String, keyToReplace: String) -> String {
+        template.replacingOccurrences(of: "{{\(keyToReplace)}}", with: value)
     }
     
     private func filePath(from url: URL) -> String {

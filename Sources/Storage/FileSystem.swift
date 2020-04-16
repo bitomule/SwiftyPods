@@ -2,6 +2,7 @@ import Foundation
 
 public protocol FileSysteming {
     func saveFile(name: String, path: URL, content: String, overwrite: Bool) throws
+    func getFile(at: URL) throws -> String
 }
 
 public final class FileSystem: FileSysteming {
@@ -20,5 +21,9 @@ public final class FileSystem: FileSysteming {
         }else{
             print("File is already created")
         }
+    }
+    
+    public func getFile(at: URL) throws -> String {
+        try String(contentsOf: at)
     }
 }

@@ -11,7 +11,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
-        .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.13.0"),
         .package(url: "https://github.com/hectr/swift-shell-interface", from: "0.0.2")
     ],
     targets: [
@@ -19,7 +18,6 @@ let package = Package(
             name: "SwiftyPods",
             dependencies: [
                 "ArgumentParser",
-                "Stencil",
                 "PodsDSL",
                 "PackageBuilder",
                 "TemplateRenderer",
@@ -36,7 +34,6 @@ let package = Package(
         .target(
             name: "PackageBuilder",
             dependencies: [
-                "Stencil",
                 "TemplateLocator",
                 "TemplateRenderer",
                 "Storage",
@@ -45,7 +42,6 @@ let package = Package(
         .target(
             name: "TemplateRenderer",
             dependencies: [
-                "Stencil",
                 "Storage"
         ]),
         .target(
