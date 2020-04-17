@@ -41,7 +41,7 @@ public final class PackageBuilder: PackageBuilding {
         try createSourcesPath(sourcesPath: sourcesPath)
         try files.forEach { file in
             let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
-            try templateFilesManager.copyTemplate(from: file, to: newFilePath)
+            try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
         }
         try manifestBuilder.build(at: temporalPath, packageName: packageName)
         try createMainSwift(sourcesPath: sourcesPath, files: files)
@@ -64,7 +64,7 @@ public final class PackageBuilder: PackageBuilding {
         let sourcesPath = path.appendingPathComponent("Sources/").appendingPathComponent("\(packageName)/")
         try originalFiles.forEach { file in
             let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
-            try templateFilesManager.copyTemplate(from: newFilePath, to: file)
+            try templateFilesManager.copyTemplate(from: newFilePath, to: file, override: true)
         }
     }
     

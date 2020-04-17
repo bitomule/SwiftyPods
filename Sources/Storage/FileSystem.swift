@@ -7,7 +7,7 @@ public enum FileSystemError: Error {
 public protocol FileSysteming {
     func saveFile(name: String, path: URL, content: String, overwrite: Bool) throws
     func getFile(at: URL) throws -> String
-    func copyFile(from: URL, to: URL) throws
+    func copyFile(from: URL, to: URL, override: Bool) throws
     func delete(at path: String) throws
     func createFolder(at url:URL) throws
 }
@@ -30,11 +30,11 @@ public final class FileSystem: FileSysteming {
         }
     }
     
-    public func copyFile(from: URL, to: URL) throws {
+    public func copyFile(from: URL, to: URL, override: Bool) throws {
         guard manager.fileExists(atPath: from.path) else {
             throw FileSystemError.fileDoesNotExists(from.path)
         }
-        if manager.fileExists(atPath: to.path) {
+        if override && manager.fileExists(atPath: to.path) {
             try manager.removeItem(at: to)
         }
         try manager.copyItem(at: from, to: to)

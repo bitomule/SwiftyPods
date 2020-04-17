@@ -2,7 +2,7 @@ import Foundation
 import Storage
 
 public protocol TemplateFilesCoping {
-    func copyTemplate(from: URL, to: URL) throws
+    func copyTemplate(from: URL, to: URL, override: Bool) throws
     func getTemplateNameFrom(url: URL) throws -> String
 }
 
@@ -18,8 +18,8 @@ public final class TemplateFilesManager: TemplateFilesCoping {
         self.storage = storage
     }
     
-    public func copyTemplate(from: URL, to: URL) throws {
-        try storage.copyFile(from: from, to: buildTargetUrl(url: to, originalFile: from))
+    public func copyTemplate(from: URL, to: URL, override: Bool) throws {
+        try storage.copyFile(from: from, to: buildTargetUrl(url: to, originalFile: from), override: override)
     }
     
     public func getTemplateNameFrom(url: URL) throws -> String {
@@ -38,7 +38,7 @@ public final class TemplateFilesManager: TemplateFilesCoping {
     }
     
     private func getNameFromContent(content: String) throws -> String? {
-        return try match(for: #"let ([a-z]+)\s?=\s?Podfile"#, in: content)
+        return try match(for: #"let ([^\s]+)\s?=\s?Podfile"#, in: content)
     }
     
     private func match(for regex: String, in text: String) throws -> String? {
