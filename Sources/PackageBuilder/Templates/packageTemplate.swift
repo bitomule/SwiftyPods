@@ -15,7 +15,9 @@ let package = Package(
         .target(
             name: "{{packageName}}",
             dependencies: [
-                "PodsDSL"
+                "PodsDSL",
+                "SwiftyPods",
+                "TemplateRenderer"
         ])
     ]
 )

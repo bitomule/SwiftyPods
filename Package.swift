@@ -8,6 +8,7 @@ let package = Package(
     products: [
         .executable(name: "swiftypods", targets: ["SwiftyPods"]),
         .library(name: "PodsDSL", targets: ["PodsDSL"]),
+        .library(name: "PodfileBuilder", targets: ["PodfileBuilder"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
@@ -43,6 +44,15 @@ let package = Package(
         .target(
             name: "Storage",
             dependencies: []
+        ),
+        .target(
+            name: "PodfileBuilder",
+            dependencies: [
+                "Storage",
+                "SwiftShell",
+                "TemplateRenderer",
+                "PodsDSL"
+            ]
         ),
         .testTarget(
             name: "SwiftyPodsTests",

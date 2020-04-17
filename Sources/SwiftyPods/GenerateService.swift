@@ -1,41 +1,28 @@
 import Foundation
-import TemplateRenderer
 import Storage
+import PackageBuilder
 
 final class GenerateService {
     private enum Constant {
         static let templateFileName = "podfile"
+        static let packageName = "SwiftyPodsTemporalProject"
     }
     private let templateArgumentParser: TemplateArgumentParser
-    private let templateRenderer: TemplateRendering
-    private let contextBuilder: TemplateContextBuilder
-    private let storage: FileSysteming
+    private let packageBuilder: PackageBuilding
+    private let templatesLocator: TemplateLocating
     
-    init(
-        templateArgumentParser: TemplateArgumentParser = TemplateArgumentParser(),
-        templateRenderer: TemplateRendering = TemplateRenderer(),
-        contextBuilder: TemplateContextBuilder = ContentBuilder(),
-        storage: FileSysteming = FileSystem()
-    ) {
+    init(templateArgumentParser: TemplateArgumentParser = TemplateArgumentParser(),
+         packageBuilder: PackageBuilding = PackageBuilder(packageName: Constant.packageName),
+         templatesLocator: TemplateLocating = TemplateLocator()) {
         self.templateArgumentParser = templateArgumentParser
-        self.templateRenderer = templateRenderer
-        self.contextBuilder = contextBuilder
-        self.storage = storage
+        self.packageBuilder = packageBuilder
+        self.templatesLocator = templatesLocator
     }
     
     func run(template: String) throws {
-        let content: String
-        if let templateURL = templateArgumentParser.getTemplateName(template: template) {
-            content = try templateRenderer.render(
-                templateFile: templateURL,
-                context: contextBuilder.build()
-            )
-        } else {
-            content = try templateRenderer.render(
-                template: podfileTemplate,
-                context: contextBuilder.build()
-            )
-        }
-        try storage.saveFile(name: Constant.templateFileName, path: URL(fileURLWithPath: ""), content: content, overwrite: true)
+        let baseUrl = URL(fileURLWithPath: "", isDirectory: true)
+        let files = try templatesLocator.findTemplates(at: baseUrl)
+        let url = try packageBuilder.build(from: baseUrl, files: files)
+        // Run generate
     }
  }
