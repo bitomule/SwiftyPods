@@ -1,7 +1,5 @@
 import ArgumentParser
-import Stencil
 import Foundation
-import PathKit
 
 struct Generate: ParsableCommand {
     

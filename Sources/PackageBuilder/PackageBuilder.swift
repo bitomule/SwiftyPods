@@ -2,7 +2,9 @@ import Foundation
 import SwiftShell
 
 public protocol PackageBuilding {
+    @discardableResult
     func build(from path: URL, files: [URL]) throws -> URL
+    func cleanTemporalFolder()
 }
 
 public final class PackageBuilder: PackageBuilding {
@@ -23,6 +25,7 @@ public final class PackageBuilder: PackageBuilding {
         self.symlinkBuilder = symlinkBuilder
     }
     
+    @discardableResult
     public func build(from path: URL, files: [URL]) throws -> URL {
         let temporalPath = try temporalPathBuilder.build(at: path)
         let sourcesPath = temporalPath.appendingPathComponent("Sources/").appendingPathComponent("\(Constants.packageName)/")
@@ -34,8 +37,11 @@ public final class PackageBuilder: PackageBuilding {
         try manifestBuilder.build(at: temporalPath)
         try createMainSwift(sourcesPath: sourcesPath)
         open(url: temporalPath)
-        waitForUserEnter(temporalPath: temporalPathBuilder.getRootTemporalPath())
-        return URL(fileURLWithPath: "")
+        return temporalPath
+    }
+    
+    public func cleanTemporalFolder() {
+        try? FileManager.default.removeItem(atPath: temporalPathBuilder.getRootTemporalPath())
     }
     
     private func open(url: URL) {
@@ -50,18 +56,5 @@ public final class PackageBuilder: PackageBuilding {
     private func createMainSwift(sourcesPath: URL) throws {
         let fileUrl = sourcesPath.appendingPathComponent("main.swift")
         FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
-    }
-    
-    private func waitForUserEnter(temporalPath: String) {
-        print("Opening Package.swift. Press any key to delete temporal package")
-        var ended = false
-        while !ended, let _ = main.stdin.readSome() {
-            ended = true
-            deleteTempFolder(path: temporalPath)
-        }
-    }
-    
-    private func deleteTempFolder(path: String) {
-        try? FileManager.default.removeItem(atPath: path)
     }
 }
