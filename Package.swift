@@ -21,16 +21,11 @@ let package = Package(
                 "PodsDSL",
                 "PackageBuilder",
                 "TemplateRenderer",
-                "TemplateLocator",
                 "Storage",
                 "SwiftShell"
         ]),
         .target(
             name: "PodsDSL",
-            dependencies: []
-        ),
-        .target(
-            name: "TemplateLocator",
             dependencies: []
         ),
         .target(
