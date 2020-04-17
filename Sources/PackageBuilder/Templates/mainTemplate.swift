@@ -9,7 +9,7 @@ let podfiles = [{{podfiles}}]
 struct Generate: ParsableCommand {
     public static let configuration = CommandConfiguration(abstract: "Generate podfile")
 
-    @Argument(name: .shortAndLong, default: "path", help: "Path where podfile will be generated")
+    @Argument(help: "Path where podfile will be generated")
     private var path: String
         
     func run() throws {
