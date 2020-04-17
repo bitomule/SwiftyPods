@@ -1,10 +1,12 @@
 import Foundation
 import Storage
+import SwiftShell
 
 public protocol PackageBuilding {
     @discardableResult
     func build(from path: URL, files: [URL]) throws -> URL
     func finish(originalFiles: [URL], path: URL) throws
+    func buildProject(from path: URL, files: [URL]) throws -> URL
 }
 
 public final class PackageBuilder: PackageBuilding {
@@ -40,6 +42,13 @@ public final class PackageBuilder: PackageBuilding {
         try manifestBuilder.build(at: temporalPath, packageName: packageName)
         try createMainSwift(sourcesPath: sourcesPath)
         return temporalPath
+    }
+    
+    public func buildProject(from path: URL, files: [URL]) throws -> URL {
+        let url = try build(from: path, files: files)
+        print("Generating temporal project. This may take a few seconds...\n")
+        run(bash: "(cd \(url.path) && swift package generate-xcodeproj)")
+        return url
     }
     
     public func finish(originalFiles: [URL], path: URL) throws {

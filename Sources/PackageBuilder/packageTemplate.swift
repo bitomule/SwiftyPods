@@ -9,7 +9,7 @@ let package = Package(
     products: [
         .executable(name: "{{packageName}}", targets: ["{{packageName}}"]),],
     dependencies: [
-        .package(url: "https://github.com/bitomule/SwiftyPods", .branch("master"))
+        .package(url: "git@github.com:bitomule/SwiftyPods", .branch("master"))
     ],
     targets: [
         .target(
