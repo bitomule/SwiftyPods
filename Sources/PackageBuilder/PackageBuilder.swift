@@ -1,16 +1,12 @@
 import Foundation
-import SwiftShell
 
 public protocol PackageBuilding {
     @discardableResult
-    func build(from path: URL, files: [URL]) throws -> URL
+    func build(from path: URL, files: [URL], packageName: String) throws -> URL
     func cleanTemporalFolder()
 }
 
 public final class PackageBuilder: PackageBuilding {
-    enum Constant {
-        static let openCommand = "open"
-    }
     private let temporalPathBuilder: TemporalPathBuilding
     private let manifestBuilder: PackageManifestBuilding
     private let symlinkBuilder: FileSymlinking
@@ -26,27 +22,21 @@ public final class PackageBuilder: PackageBuilding {
     }
     
     @discardableResult
-    public func build(from path: URL, files: [URL]) throws -> URL {
+    public func build(from path: URL, files: [URL], packageName: String) throws -> URL {
         let temporalPath = try temporalPathBuilder.build(at: path)
-        let sourcesPath = temporalPath.appendingPathComponent("Sources/").appendingPathComponent("\(Constants.packageName)/")
+        let sourcesPath = temporalPath.appendingPathComponent("Sources/").appendingPathComponent("\(packageName)/")
         try createSourcesPath(sourcesPath: sourcesPath)
         try files.forEach { file in
             let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
             try symlinkBuilder.linkFile(at: newFilePath, to: file)
         }
-        try manifestBuilder.build(at: temporalPath)
+        try manifestBuilder.build(at: temporalPath, packageName: packageName)
         try createMainSwift(sourcesPath: sourcesPath)
-        open(url: temporalPath)
         return temporalPath
     }
     
     public func cleanTemporalFolder() {
         try? FileManager.default.removeItem(atPath: temporalPathBuilder.getRootTemporalPath())
-    }
-    
-    private func open(url: URL) {
-        let packageURL = url.appendingPathComponent(Constants.packageFileName)
-        run(Constant.openCommand, packageURL.relativeString)
     }
     
     private func createSourcesPath(sourcesPath: URL) throws {
