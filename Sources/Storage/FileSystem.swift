@@ -9,6 +9,7 @@ public protocol FileSysteming {
     func getFile(at: URL) throws -> String
     func copyFile(from: URL, to: URL) throws
     func delete(at path: String) throws
+    func createFolder(at url:URL) throws
 }
 
 public final class FileSystem: FileSysteming {
@@ -45,5 +46,9 @@ public final class FileSystem: FileSysteming {
     
     public func delete(at path: String) throws {
         try manager.removeItem(atPath: path)
+    }
+    
+    public func createFolder(at url: URL) throws {
+        try manager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
     }
 }

@@ -65,11 +65,10 @@ public final class PackageBuilder: PackageBuilding {
     }
     
     private func createSourcesPath(sourcesPath: URL) throws {
-        try FileManager.default.createDirectory(atPath: sourcesPath.relativePath, withIntermediateDirectories: true, attributes: nil)
+        try storage.createFolder(at: sourcesPath)
     }
     
     private func createMainSwift(sourcesPath: URL) throws {
-        let fileUrl = sourcesPath.appendingPathComponent("main.swift")
-        FileManager.default.createFile(atPath: fileUrl.path, contents: nil, attributes: nil)
+        try storage.saveFile(name: "main.swift", path: sourcesPath, content: "", overwrite: true)
     }
 }

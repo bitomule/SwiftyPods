@@ -1,4 +1,5 @@
 import Foundation
+import Storage
 
 public protocol TemporalPathBuilding {
     func build(at path: URL) throws -> URL
@@ -6,21 +7,24 @@ public protocol TemporalPathBuilding {
 }
 
 public final class TemporalPathBuilder: TemporalPathBuilding {
-    private let manager: FileManager
+    enum Constant {
+        static let temporalFolderPath = "tmp/"
+    }
+    private let storage: FileSysteming
     
-    public init(manager: FileManager = FileManager.default) {
-        self.manager = manager
+    public init(storage: FileSysteming = FileSystem()) {
+        self.storage = storage
     }
     
     public func build(at path: URL) throws -> URL {
         let uuid = UUID().uuidString
-        let tmpPath = getRootTemporalPath() + uuid + "/"
+        let tmpPath = Constant.temporalFolderPath + uuid + "/"
         let newPath = path.appendingPathComponent(tmpPath, isDirectory: true)
-        try manager.createDirectory(atPath: newPath.relativePath, withIntermediateDirectories: true, attributes: nil)
+        try storage.createFolder(at: newPath)
         return newPath
     }
     
     public func getRootTemporalPath() -> String {
-        "tmp/"
+        Constant.temporalFolderPath
     }
 }
