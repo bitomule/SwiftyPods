@@ -1,40 +1,30 @@
 import Foundation
-import TemplateLocator
 import SwiftShell
 
 public protocol PackageBuilding {
-    func build(from path: URL) throws -> URL
+    func build(from path: URL, files: [URL]) throws -> URL
 }
 
 public final class PackageBuilder: PackageBuilding {
-    // Create temporal path
-    // Create package.swift from template
-    // Link files to folder using FileSymlinker
-    // Open package.swift
     enum Constant {
         static let openCommand = "open"
-        static let symlinkCommand = "ln -s"
     }
-    private let templateLocator: TemplateLocating
     private let temporalPathBuilder: TemporalPathBuilding
     private let manifestBuilder: PackageManifestBuilding
     private let symlinkBuilder: FileSymlinking
     
     public init(
-        templateLocator: TemplateLocating = TemplateLocator(),
         temporalPathBuilder: TemporalPathBuilding = TemporalPathBuilder(),
         manifestBuilder: PackageManifestBuilding = PackageManifestBuilder(),
         symlinkBuilder: FileSymlinking = FileSimlinker()
     ) {
-        self.templateLocator = templateLocator
         self.temporalPathBuilder = temporalPathBuilder
         self.manifestBuilder = manifestBuilder
         self.symlinkBuilder = symlinkBuilder
     }
     
-    public func build(from path: URL) throws -> URL {
+    public func build(from path: URL, files: [URL]) throws -> URL {
         let temporalPath = try temporalPathBuilder.build(at: path)
-        let files = try templateLocator.findTemplates(at: path)
         let sourcesPath = temporalPath.appendingPathComponent("Sources/").appendingPathComponent("\(Constants.packageName)/")
         try createSourcesPath(sourcesPath: sourcesPath)
         try files.forEach { file in

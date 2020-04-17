@@ -34,7 +34,6 @@ let package = Package(
         .target(
             name: "PackageBuilder",
             dependencies: [
-                "TemplateLocator",
                 "TemplateRenderer",
                 "Storage",
                 "SwiftShell"
