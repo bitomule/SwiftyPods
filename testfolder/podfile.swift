@@ -1,7 +1,7 @@
 import Foundation
 import PodsDSL
 
-let podfile = Podfile {
+podfiles += Podfile {
     Target(
         name: "MainApp",
         dependencies: [
