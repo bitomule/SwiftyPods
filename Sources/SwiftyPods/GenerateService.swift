@@ -30,6 +30,6 @@ final class GenerateService {
     
     private func generate(url: URL) throws {
         print("Generating podfile\n")
-        try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) generate --path \(URL(fileURLWithPath: "", isDirectory: true).path))")
+        try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) \(URL(fileURLWithPath: "", isDirectory: true).path))")
     }
  }
