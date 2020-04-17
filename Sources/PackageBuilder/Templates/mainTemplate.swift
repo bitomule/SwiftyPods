@@ -7,22 +7,15 @@ import PodfileBuilder
 let podfiles = [{{podfiles}}]
 
 struct Generate: ParsableCommand {
-    public static let configuration = CommandConfiguration(abstract: "Open templates in folder to edit")
+    public static let configuration = CommandConfiguration(abstract: "Generate podfile")
+
+    @Argument(name: .shortAndLong, default: "path", help: "Path where podfile will be generated")
+    private var path: String
         
     func run() throws {
-        buildPodfile(podfiles: podfiles)
+        try buildPodfile(podfiles: podfiles, path: path)
     }
 }
 
-struct DSLBuilder: ParsableCommand {
-    static let configuration = CommandConfiguration(
-        abstract: "A Swift command-line tool to manage podfile",
-        subcommands: [
-            Generate.self
-    ])
-
-    init() { }
-}
-
-DSLBuilder.main()
+Generate.main()
 """

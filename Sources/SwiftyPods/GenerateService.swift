@@ -1,6 +1,7 @@
 import Foundation
 import Storage
 import PackageBuilder
+import SwiftShell
 
 final class GenerateService {
     private enum Constant {
@@ -23,6 +24,12 @@ final class GenerateService {
         let baseUrl = URL(fileURLWithPath: "", isDirectory: true)
         let files = try templatesLocator.findTemplates(at: baseUrl)
         let url = try packageBuilder.build(from: baseUrl, files: files)
-        // Run generate
+        try generate(url: url)
+        try packageBuilder.finish(originalFiles: files, path: url)
+    }
+    
+    private func generate(url: URL) throws {
+        print("Generating podfile\n")
+        try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) generate --path \(URL(fileURLWithPath: "", isDirectory: true).path))")
     }
  }
