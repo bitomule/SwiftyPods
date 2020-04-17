@@ -43,16 +43,24 @@ public final class PackageBuilder: PackageBuilding {
             let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
             try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
         }
-        try manifestBuilder.build(at: temporalPath, packageName: packageName)
+        try manifestBuilder.build(at: temporalPath, packageName: packageName, includingCommandDependencies: true)
         try createMainSwift(sourcesPath: sourcesPath, files: files)
         return temporalPath
     }
     
     public func buildProject(from path: URL, files: [URL]) throws -> URL {
-        let url = try build(from: path, files: files)
+        let temporalPath = try temporalPathBuilder.build(at: path)
+        let sourcesPath = temporalPath.appendingPathComponent("Sources/").appendingPathComponent("\(packageName)/")
+        try createSourcesPath(sourcesPath: sourcesPath)
+        try files.forEach { file in
+            let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
+            try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
+        }
+        try manifestBuilder.build(at: temporalPath, packageName: packageName, includingCommandDependencies: false)
+        try createEmptyMainSwift(sourcesPath: sourcesPath, files: files)
         print("Generating temporal project. This may take a few seconds...\n")
-        run(bash: "(cd \(url.path) && swift package generate-xcodeproj)")
-        return url
+        run(bash: "(cd \(temporalPath.path) && swift package generate-xcodeproj)")
+        return temporalPath
     }
     
     public func finish(originalFiles: [URL], path: URL) throws {
@@ -76,5 +84,9 @@ public final class PackageBuilder: PackageBuilding {
         let fileNames = try files.map { try templateFilesManager.getTemplateNameFrom(url: $0) }
         let mainContent = try templareRenderer.render(template: mainTemplate, context: ["podfiles": fileNames.joined(separator: ", ")])
         try storage.saveFile(name: "main.swift", path: sourcesPath, content: mainContent, overwrite: true)
+    }
+    
+    private func createEmptyMainSwift(sourcesPath: URL, files: [URL]) throws {
+        try storage.saveFile(name: "main.swift", path: sourcesPath, content: "", overwrite: true)
     }
 }

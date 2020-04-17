@@ -3,7 +3,7 @@ import TemplateRenderer
 import Storage
 
 public protocol PackageManifestBuilding {
-    func build(at path: URL, packageName: String) throws
+    func build(at path: URL, packageName: String, includingCommandDependencies: Bool) throws
 }
 
 public final class PackageManifestBuilder: PackageManifestBuilding {
@@ -19,8 +19,9 @@ public final class PackageManifestBuilder: PackageManifestBuilding {
         self.storage = storage
     }
     
-    public func build(at path: URL, packageName: String) throws {
-        let content = try templateRenderer.render(template: packageTemplate, context: ["packageName": packageName])
+    public func build(at path: URL, packageName: String, includingCommandDependencies: Bool) throws {
+        let template = includingCommandDependencies ? packageTemplate : dslOnlyPackage
+        let content = try templateRenderer.render(template: template, context: ["packageName": packageName])
         try storage.saveFile(name: Constant.packageFileName, path: path, content: content, overwrite: true)
     }
 }
