@@ -1,5 +1,6 @@
 import Foundation
 import TemplateRenderer
+import Storage
 
 final class GenerateService {
     private enum Constant {
@@ -8,33 +9,33 @@ final class GenerateService {
     private let templateArgumentParser: TemplateArgumentParser
     private let templateRenderer: TemplateRendering
     private let contextBuilder: TemplateContextBuilder
+    private let storage: FileSysteming
     
     init(
         templateArgumentParser: TemplateArgumentParser = TemplateArgumentParser(),
         templateRenderer: TemplateRendering = TemplateRenderer(),
-        contextBuilder: TemplateContextBuilder = ContentBuilder()
+        contextBuilder: TemplateContextBuilder = ContentBuilder(),
+        storage: FileSysteming = FileSystem()
     ) {
         self.templateArgumentParser = templateArgumentParser
         self.templateRenderer = templateRenderer
         self.contextBuilder = contextBuilder
+        self.storage = storage
     }
     
     func run(template: String) throws {
+        let content: String
         if let templateURL = templateArgumentParser.getTemplateName(template: template) {
-            try templateRenderer.render(
+            content = try templateRenderer.render(
                 templateFile: templateURL,
-                context: contextBuilder.build(),
-                targetName: Constant.templateFileName,
-                targetPath: URL(fileURLWithPath: "")
+                context: contextBuilder.build()
             )
         } else {
-            try templateRenderer.render(
+            content = try templateRenderer.render(
                 template: podfileTemplate,
-                context: contextBuilder.build(),
-                targetName: Constant.templateFileName,
-                targetPath: URL(fileURLWithPath: "")
+                context: contextBuilder.build()
             )
         }
-        
+        try storage.saveFile(name: Constant.templateFileName, path: URL(fileURLWithPath: ""), content: content, overwrite: true)
     }
  }

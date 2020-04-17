@@ -1,6 +1,7 @@
 import Foundation
 import Storage
 import SwiftShell
+import TemplateRenderer
 
 public protocol PackageBuilding {
     @discardableResult
@@ -13,6 +14,7 @@ public final class PackageBuilder: PackageBuilding {
     private let temporalPathBuilder: TemporalPathBuilding
     private let manifestBuilder: PackageManifestBuilding
     private let templateFilesManager: TemplateFilesCoping
+    private let templareRenderer: TemplateRendering
     private let storage: FileSysteming
     private let packageName: String
     
@@ -20,12 +22,14 @@ public final class PackageBuilder: PackageBuilding {
         temporalPathBuilder: TemporalPathBuilding = TemporalPathBuilder(),
         manifestBuilder: PackageManifestBuilding = PackageManifestBuilder(),
         templateFilesManager: TemplateFilesCoping = TemplateFilesManager(),
+        templareRenderer: TemplateRendering = TemplateRenderer(),
         storage: FileSysteming = FileSystem(),
         packageName: String
     ) {
         self.temporalPathBuilder = temporalPathBuilder
         self.manifestBuilder = manifestBuilder
         self.templateFilesManager = templateFilesManager
+        self.templareRenderer = templareRenderer
         self.storage = storage
         self.packageName = packageName
     }
@@ -40,7 +44,7 @@ public final class PackageBuilder: PackageBuilding {
             try templateFilesManager.copyTemplate(from: file, to: newFilePath)
         }
         try manifestBuilder.build(at: temporalPath, packageName: packageName)
-        try createMainSwift(sourcesPath: sourcesPath)
+        try createMainSwift(sourcesPath: sourcesPath, files: files)
         return temporalPath
     }
     
@@ -68,7 +72,9 @@ public final class PackageBuilder: PackageBuilding {
         try storage.createFolder(at: sourcesPath)
     }
     
-    private func createMainSwift(sourcesPath: URL) throws {
-        try storage.saveFile(name: "main.swift", path: sourcesPath, content: "", overwrite: true)
+    private func createMainSwift(sourcesPath: URL, files: [URL]) throws {
+        let fileNames = try files.map { try templateFilesManager.getTemplateNameFrom(url: $0) }
+        let mainContent = try templareRenderer.render(template: mainTemplate, context: ["podfiles": fileNames.joined(separator: ", ")])
+        try storage.saveFile(name: "main.swift", path: sourcesPath, content: mainContent, overwrite: true)
     }
 }

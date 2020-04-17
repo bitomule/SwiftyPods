@@ -3,6 +3,7 @@ import Storage
 
 public protocol TemplateFilesCoping {
     func copyTemplate(from: URL, to: URL) throws
+    func getTemplateNameFrom(url: URL) throws -> String
 }
 
 public final class TemplateFilesManager: TemplateFilesCoping {
@@ -19,6 +20,10 @@ public final class TemplateFilesManager: TemplateFilesCoping {
     
     public func copyTemplate(from: URL, to: URL) throws {
         try storage.copyFile(from: from, to: buildTargetUrl(url: to, originalFile: from))
+    }
+    
+    public func getTemplateNameFrom(url: URL) throws -> String {
+        try findNameForFile(at: url)
     }
     
     private func buildTargetUrl(url: URL, originalFile: URL) throws -> URL {

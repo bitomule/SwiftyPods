@@ -4,17 +4,13 @@ import Storage
 public protocol TemplateRendering {
     func render(
         template: String,
-        context: [String: String],
-        targetName: String,
-        targetPath: URL
-    ) throws
+        context: [String: String]
+    ) throws -> String
     
     func render(
         templateFile: URL,
-        context: [String: String],
-        targetName: String,
-        targetPath: URL
-    ) throws
+        context: [String: String]
+    ) throws -> String
 }
 
 public final class TemplateRenderer: TemplateRendering {
@@ -30,27 +26,21 @@ public final class TemplateRenderer: TemplateRendering {
     
     public func render(
         template: String,
-        context: [String: String],
-        targetName: String,
-        targetPath: URL
-    ) throws {
-        let content = context.reduce(template) { result, dict in
+        context: [String: String]
+    ) throws -> String {
+        context.reduce(template) { result, dict in
             return generateFile(template: result, value: dict.value, keyToReplace: dict.key)
         }
-        try storage.saveFile(name: targetName, path: targetPath, content: content, overwrite: true)
     }
     
     public func render(
         templateFile: URL,
-        context: [String: String],
-        targetName: String,
-        targetPath: URL
-    ) throws {
+        context: [String: String]
+    ) throws -> String {
         let template = try storage.getFile(at: templateFile)
-        let content = context.reduce(template) { result, dict in
+        return context.reduce(template) { result, dict in
             return generateFile(template: result, value: dict.value, keyToReplace: dict.key)
         }
-        try storage.saveFile(name: targetName, path: targetPath, content: content, overwrite: true)
     }
     
     private func generateFile(template: String, value: String, keyToReplace: String) -> String {

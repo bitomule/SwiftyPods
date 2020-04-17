@@ -1,5 +1,6 @@
 import Foundation
 import TemplateRenderer
+import Storage
 
 public protocol PackageManifestBuilding {
     func build(at path: URL, packageName: String) throws
@@ -10,12 +11,16 @@ public final class PackageManifestBuilder: PackageManifestBuilding {
         static let packageFileName = "Package.swift"
     }
     private let templateRenderer: TemplateRendering
+    private let storage: FileSysteming
     
-    public init(templateRenderer: TemplateRendering = TemplateRenderer()) {
+    public init(templateRenderer: TemplateRendering = TemplateRenderer(),
+                storage: FileSysteming = FileSystem()) {
         self.templateRenderer = templateRenderer
+        self.storage = storage
     }
     
     public func build(at path: URL, packageName: String) throws {
-        try templateRenderer.render(template: packageTemplate, context: ["packageName": packageName], targetName: Constant.packageFileName, targetPath: path)
+        let content = try templateRenderer.render(template: packageTemplate, context: ["packageName": packageName])
+        try storage.saveFile(name: Constant.packageFileName, path: path, content: content, overwrite: true)
     }
 }
