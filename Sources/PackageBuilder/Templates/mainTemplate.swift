@@ -33,7 +33,7 @@ func buildPodfile(podfiles: [Podfile], path: String) throws {
 
 private func saveFile(name: String, path: URL, content: String) throws {
     let newFile = path.appendingPathComponent(name).path
-    FileManager.default.createFile(atPath: newFile, contents: content.data(using: encoding), attributes: nil)
+    FileManager.default.createFile(atPath: newFile, contents: content.data(using: .uft8), attributes: nil)
 }
 
 private final class FixedContentBuilder {
@@ -59,12 +59,6 @@ private final class FixedContentBuilder {
 private final class FixedTemplateRenderer {
     enum Constant {
         static let fileName = "podfile"
-    }
-    
-    private let storage: FileSysteming
-    
-    public init(storage: FileSysteming = FileSystem()){
-        self.storage = storage
     }
     
     public func render(
@@ -98,4 +92,11 @@ private final class FixedTemplateRenderer {
         url.lastPathComponent
     }
 }
+
+let podfileTemplate = """
+platform :ios, '13.0'
+inhibit_all_warnings!
+
+{{pods}}
+"""
 """#
