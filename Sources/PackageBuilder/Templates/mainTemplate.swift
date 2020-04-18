@@ -28,12 +28,12 @@ func buildPodfile(podfiles: [Podfile], path: String) throws {
         template: podfileTemplate,
         context: context
     )
-    try saveFile(name: "podfile", path: url, content: template, overwrite: true)
+    try saveFile(name: "podfile", path: url, content: template)
 }
 
 private func saveFile(name: String, path: URL, content: String) throws {
     let newFile = path.appendingPathComponent(name).path
-    FileManager.default.createFile(atPath: newFile, contents: content.data(using: .uft8), attributes: nil)
+    FileManager.default.createFile(atPath: newFile, contents: content.data(using: .utf8), attributes: nil)
 }
 
 private final class FixedContentBuilder {
@@ -74,7 +74,7 @@ private final class FixedTemplateRenderer {
         templateFile: URL,
         context: [String: String]
     ) throws -> String {
-        let template = try storage.getFile(at: templateFile)
+        let template = try String(contentsOf: templateFile)
         return context.reduce(template) { result, dict in
             return generateFile(template: result, value: dict.value, keyToReplace: dict.key)
         }
