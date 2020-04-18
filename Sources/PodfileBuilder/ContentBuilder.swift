@@ -1,5 +1,5 @@
 import Foundation
-import PodsDSL
+import SwiftyPodsDSL
 
 protocol TemplateContextBuilder {
     func build(podfiles: [Podfile]) -> [String: String]

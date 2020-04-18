@@ -1,7 +1,7 @@
 let mainTemplate = """
 import Foundation
 import ArgumentParser
-import PodsDSL
+import SwiftyPodsDSL
 import PodfileBuilder
 
 let podfiles = [{{podfiles}}]

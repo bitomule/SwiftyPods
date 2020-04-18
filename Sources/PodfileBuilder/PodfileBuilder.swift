@@ -1,6 +1,6 @@
 import Foundation
 import Storage
-import PodsDSL
+import SwiftyPodsDSL
 import TemplateRenderer
 
 public func buildPodfile(podfiles: [Podfile], path: String) throws {
