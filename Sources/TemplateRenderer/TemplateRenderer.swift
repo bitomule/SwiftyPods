@@ -14,10 +14,6 @@ public protocol TemplateRendering {
 }
 
 public final class TemplateRenderer: TemplateRendering {
-    enum Constant {
-        static let fileName = "podfile"
-    }
-    
     private let storage: FileSysteming
     
     public init(storage: FileSysteming = FileSystem()){
