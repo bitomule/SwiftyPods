@@ -1,7 +1,25 @@
 import Foundation
+import ArgumentParser
 import SwiftyPodsDSL
 
-public func buildPodfile(podfiles: [Podfile], path: String) throws {
+let podfiles = [podfile]
+
+struct Generate: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Generate podfile")
+
+    @Argument(help: "Path where podfile will be generated")
+    private var path: String
+        
+    func run() throws {
+        try buildPodfile(podfiles: podfiles, path: path)
+    }
+}
+
+Generate.main()
+
+// MARK: - Code required to generate template
+
+func buildPodfile(podfiles: [Podfile], path: String) throws {
     // Check folder exists
     let url = URL(fileURLWithPath: path, isDirectory: true)
     let context = FixedContentBuilder().build(podfiles: podfiles)
@@ -9,12 +27,12 @@ public func buildPodfile(podfiles: [Podfile], path: String) throws {
         template: podfileTemplate,
         context: context
     )
-    try saveFile(name: "podfile", path: url, content: template)
+    try saveFile(name: "podfile", path: url, content: template, overwrite: true)
 }
 
 private func saveFile(name: String, path: URL, content: String) throws {
     let newFile = path.appendingPathComponent(name).path
-    FileManager.default.createFile(atPath: newFile, contents: content.data(using: .utf8), attributes: nil)
+    FileManager.default.createFile(atPath: newFile, contents: content.data(using: encoding), attributes: nil)
 }
 
 private final class FixedContentBuilder {
@@ -42,6 +60,12 @@ private final class FixedTemplateRenderer {
         static let fileName = "podfile"
     }
     
+    private let storage: FileSysteming
+    
+    public init(storage: FileSysteming = FileSystem()){
+        self.storage = storage
+    }
+    
     public func render(
         template: String,
         context: [String: String]
@@ -55,7 +79,7 @@ private final class FixedTemplateRenderer {
         templateFile: URL,
         context: [String: String]
     ) throws -> String {
-        let template = try String(contentsOf: templateFile)
+        let template = try storage.getFile(at: templateFile)
         return context.reduce(template) { result, dict in
             return generateFile(template: result, value: dict.value, keyToReplace: dict.key)
         }

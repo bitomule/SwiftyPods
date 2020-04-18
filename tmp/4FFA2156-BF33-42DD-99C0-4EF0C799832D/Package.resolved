@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser",
+        "state": {
+          "branch": null,
+          "revision": "9f04d1ff1afbccd02279338a2c91e5f27c45e93a",
+          "version": "0.0.5"
+        }
+      },
+      {
+        "package": "SwiftyPodsDSL",
+        "repositoryURL": "git@github.com:bitomule/SwiftyPodsDSL",
+        "state": {
+          "branch": "master",
+          "revision": "fc2886718165dc907d5a41ed0e6b489f355c94e2",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
