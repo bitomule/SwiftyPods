@@ -3,6 +3,7 @@ import Storage
 
 public protocol TemplateFilesCoping {
     func copyTemplate(from: URL, to: URL, override: Bool) throws
+    func restoreTemplate(from: URL, to: URL) throws
     func getTemplateNameFrom(url: URL) throws -> String
 }
 
@@ -19,14 +20,18 @@ public final class TemplateFilesManager: TemplateFilesCoping {
     }
     
     public func copyTemplate(from: URL, to: URL, override: Bool) throws {
-        try storage.copyFile(from: from, to: buildTargetUrl(url: to, originalFile: from), override: override)
+        try storage.copyFile(from: from, to: buildTemplateURLFromPropertyName(url: to, originalFile: from), override: override)
+    }
+    
+    public func restoreTemplate(from: URL, to: URL) throws {
+        try storage.copyFile(from: buildTemplateURLFromPropertyName(url: from, originalFile: to), to: to, override: true)
     }
     
     public func getTemplateNameFrom(url: URL) throws -> String {
         try findNameForFile(at: url)
     }
     
-    private func buildTargetUrl(url: URL, originalFile: URL) throws -> URL {
+    private func buildTemplateURLFromPropertyName(url: URL, originalFile: URL) throws -> URL {
         let nameForTarget = try findNameForFile(at: originalFile) + Constant.fileExtension
         let targetUrl = url.deletingLastPathComponent()
         return targetUrl.appendingPathComponent(nameForTarget)

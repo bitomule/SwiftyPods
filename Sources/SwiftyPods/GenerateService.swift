@@ -26,6 +26,7 @@ final class GenerateService {
         let files = try templatesLocator.findTemplates(at: baseUrl)
         let url = try packageBuilder.build(from: baseUrl, files: files)
         try generate(url: url)
+        print("Cleaning")
         try packageBuilder.finish(originalFiles: files, path: url)
     }
     

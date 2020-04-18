@@ -77,7 +77,7 @@ public final class PackageBuilder: PackageBuilding {
         let sourcesPath = path.appendingPathComponent("Sources/").appendingPathComponent("\(packageName)/")
         try originalFiles.forEach { file in
             let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
-            try templateFilesManager.copyTemplate(from: newFilePath, to: file, override: true)
+            try templateFilesManager.restoreTemplate(from: newFilePath, to: file)
         }
     }
     
