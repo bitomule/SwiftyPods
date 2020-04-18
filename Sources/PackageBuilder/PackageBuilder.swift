@@ -8,6 +8,7 @@ public protocol PackageBuilding {
     func build(from path: URL, files: [URL]) throws -> URL
     func finish(originalFiles: [URL], path: URL) throws
     func buildProject(from path: URL, files: [URL]) throws -> URL
+    func clean()
 }
 
 public final class PackageBuilder: PackageBuilding {
@@ -66,6 +67,10 @@ public final class PackageBuilder: PackageBuilding {
     public func finish(originalFiles: [URL], path: URL) throws {
         try copyFilesBack(originalFiles: originalFiles, path: path)
         try storage.delete(at: temporalPathBuilder.getRootTemporalPath())
+    }
+    
+    public func clean() {
+        try? storage.delete(at: temporalPathBuilder.getRootTemporalPath())
     }
     
     private func copyFilesBack(originalFiles: [URL], path: URL) throws {

@@ -21,6 +21,7 @@ final class GenerateService {
     }
     
     func run(template: String) throws {
+        packageBuilder.clean()
         let baseUrl = URL(fileURLWithPath: "", isDirectory: true)
         let files = try templatesLocator.findTemplates(at: baseUrl)
         let url = try packageBuilder.build(from: baseUrl, files: files)

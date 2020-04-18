@@ -20,6 +20,7 @@ final class EditService {
     }
     
     func run() throws {
+        packageBuilder.clean()
         let baseUrl = URL(fileURLWithPath: "", isDirectory: true)
         let files = try getTemplateFiles()
         let url = try packageBuilder.buildProject(from: baseUrl, files: files)
