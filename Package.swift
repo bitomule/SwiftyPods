@@ -7,28 +7,24 @@ let package = Package(
     name: "SwiftyPods",
     products: [
         .executable(name: "swiftypods", targets: ["SwiftyPods"]),
-        .library(name: "PodsDSL", targets: ["PodsDSL"]),
         .library(name: "PodfileBuilder", targets: ["PodfileBuilder"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
-        .package(url: "https://github.com/kareman/SwiftShell", from: "5.0.1")
+        .package(url: "https://github.com/kareman/SwiftShell", from: "5.0.1"),
+        .package(url: "git@github.com:bitomule/SwiftyPodsDSL", .branch("master"))
     ],
     targets: [
         .target(
             name: "SwiftyPods",
             dependencies: [
                 "ArgumentParser",
-                "PodsDSL",
+                "SwiftyPodsDSL",
                 "PackageBuilder",
                 "TemplateRenderer",
                 "Storage",
                 "SwiftShell"
         ]),
-        .target(
-            name: "PodsDSL",
-            dependencies: []
-        ),
         .target(
             name: "PackageBuilder",
             dependencies: [
@@ -51,7 +47,7 @@ let package = Package(
                 "Storage",
                 "SwiftShell",
                 "TemplateRenderer",
-                "PodsDSL"
+                "SwiftyPodsDSL"
             ]
         ),
         .testTarget(

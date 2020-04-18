@@ -1,6 +1,5 @@
 import Foundation
 import PackageBuilder
-import TemplateLocator
 import SwiftShell
 
 final class EditService {
