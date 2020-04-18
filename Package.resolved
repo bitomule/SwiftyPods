@@ -23,9 +23,9 @@
         "package": "SwiftyPodsDSL",
         "repositoryURL": "https://github.com/bitomule/SwiftyPodsDSL",
         "state": {
-          "branch": "master",
-          "revision": "3800f78ba7de5b08b8a46fc4fffe334c2c230d6f",
-          "version": null
+          "branch": null,
+          "revision": "9aa8ef184618e5048e22d430ebef7a46edc0be88",
+          "version": "0.0.1"
         }
       }
     ]
