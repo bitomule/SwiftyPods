@@ -12,7 +12,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
         .package(url: "https://github.com/kareman/SwiftShell", from: "5.0.1"),
-        .package(url: "git@github.com:bitomule/SwiftyPodsDSL", .branch("master"))
+        .package(url: "https://github.com/bitomule/SwiftyPodsDSL", .branch("master"))
     ],
     targets: [
         .target(
@@ -51,7 +51,15 @@ let package = Package(
             ]
         ),
         .testTarget(
+            name: "TemplateRendererTests",
+            dependencies: [
+                "TemplateRenderer",
+                "Storage"
+        ]),
+        .testTarget(
             name: "SwiftyPodsTests",
-            dependencies: ["SwiftyPods"]),
+            dependencies: [
+                "SwiftyPods"
+        ]),
     ]
 )
