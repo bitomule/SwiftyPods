@@ -10,14 +10,15 @@ let package = Package(
         .executable(name: "{{packageName}}", targets: ["{{packageName}}"]),],
     dependencies: [
         .package(url: "git@github.com:bitomule/SwiftyPods", .branch("master")),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1")
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
+        .package(url: "git@github.com:bitomule/SwiftyPodsDSL", .branch("master"))
     ],
     targets: [
         .target(
             name: "{{packageName}}",
             dependencies: [
                 "ArgumentParser",
-                "PodsDSL",
+                "SwiftyPodsDSL",
                 "PodfileBuilder"
         ])
     ]
