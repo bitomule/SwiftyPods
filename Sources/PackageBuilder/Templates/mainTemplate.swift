@@ -16,8 +16,6 @@ struct Generate: ParsableCommand {
     }
 }
 
-Generate.main()
-
 // MARK: - Code required to generate template
 
 func buildPodfile(podfiles: [Podfile], path: String) throws {
@@ -99,4 +97,6 @@ inhibit_all_warnings!
 
 {{pods}}
 """
+
+Generate.main()
 """#
