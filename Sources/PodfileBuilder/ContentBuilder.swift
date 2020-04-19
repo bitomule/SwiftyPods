@@ -12,7 +12,7 @@ final class ContentBuilder: TemplateContextBuilder {
     
     func build(podfiles: [Podfile]) -> [String: String] {
         return [
-            Constant.propertyName: podfiles.map { $0.toString() }.joined(separator: "\n")
+            Constant.propertyName: podfiles.map { $0.render() }.joined(separator: "\n")
         ]
     }
 }
