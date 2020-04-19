@@ -1,21 +1,21 @@
 import Foundation
 
-public protocol TemplateLocating {
+protocol TemplateLocating {
     func findTemplates(at path: URL) throws -> [URL]
 }
 
-public final class TemplateLocator: TemplateLocating {
+final class TemplateLocator: TemplateLocating {
     enum Constant {
         static let templateName = "podfile.swift"
     }
     
     private let manager: FileManager
     
-    public init(manager: FileManager = FileManager.default) {
+    init(manager: FileManager = FileManager.default) {
         self.manager = manager
     }
     
-    public func findTemplates(at path: URL) throws -> [URL] {
+    func findTemplates(at path: URL) throws -> [URL] {
         try manager
             .enumerator(at: path, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles], errorHandler: nil)?
             .allObjects

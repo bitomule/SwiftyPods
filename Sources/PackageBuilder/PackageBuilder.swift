@@ -15,58 +15,64 @@ public final class PackageBuilder: PackageBuilding {
     private let temporalPathBuilder: TemporalPathBuilding
     private let manifestBuilder: PackageManifestBuilding
     private let templateFilesManager: TemplateFilesCoping
-    private let templareRenderer: TemplateRendering
+    private let templateRenderer: TemplateRendering
     private let storage: FileSysteming
+    private let bash: BashRunning
     private let packageName: String
+    private let templateWithCommands: String
+    private let templateWithoutCommands: String
+    private let mainFileWithCommandsTemplate: String
     
     public convenience init(packageName: String) {
         self.init(
             temporalPathBuilder: TemporalPathBuilder(),
             manifestBuilder: PackageManifestBuilder(),
             templateFilesManager: TemplateFilesManager(),
-            templareRenderer: TemplateRenderer(),
+            templateRenderer: TemplateRenderer(),
             storage: FileSystem(),
-            packageName: packageName)
+            bash: Bash(),
+            packageName: packageName,
+            templateWithCommands: packageTemplate,
+            templateWithoutCommands: dslOnlyPackage,
+            mainFileWithCommandsTemplate: mainTemplate)
     }
     
     init(
         temporalPathBuilder: TemporalPathBuilding,
         manifestBuilder: PackageManifestBuilding,
         templateFilesManager: TemplateFilesCoping,
-        templareRenderer: TemplateRendering,
+        templateRenderer: TemplateRendering,
         storage: FileSysteming,
-        packageName: String
+        bash: BashRunning,
+        packageName: String,
+        templateWithCommands: String,
+        templateWithoutCommands: String,
+        mainFileWithCommandsTemplate: String
     ) {
         self.temporalPathBuilder = temporalPathBuilder
         self.manifestBuilder = manifestBuilder
         self.templateFilesManager = templateFilesManager
-        self.templareRenderer = templareRenderer
+        self.templateRenderer = templateRenderer
         self.storage = storage
+        self.bash = bash
         self.packageName = packageName
+        self.templateWithCommands = templateWithCommands
+        self.templateWithoutCommands = templateWithoutCommands
+        self.mainFileWithCommandsTemplate = mainFileWithCommandsTemplate
     }
     
     @discardableResult
     public func build(from path: URL, files: [URL]) throws -> URL {
-        let temporalPath = try temporalPathBuilder.build(at: path)
-        try files.forEach { file in
-            let newFilePath = temporalPath.appendingPathComponent(file.lastPathComponent)
-            try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
-        }
-        try manifestBuilder.build(at: temporalPath, packageName: packageName, template: packageTemplate)
+        let temporalPath = try createBasicPackage(path: path, files: files, manifestTemplate: templateWithCommands)
         try createMainSwift(sourcesPath: temporalPath, files: files)
         return temporalPath
     }
     
     public func buildProject(from path: URL, files: [URL]) throws -> URL {
-        let temporalPath = try temporalPathBuilder.build(at: path)
-        try files.forEach { file in
-            let newFilePath = temporalPath.appendingPathComponent(file.lastPathComponent)
-            try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
-        }
-        try manifestBuilder.build(at: temporalPath, packageName: packageName, template: dslOnlyPackage)
+        let temporalPath = try createBasicPackage(path: path, files: files, manifestTemplate: templateWithoutCommands)
         try createEmptyMainSwift(sourcesPath: temporalPath, files: files)
         print("Generating temporal project. This may take a few seconds...\n")
-        run(bash: "(cd \(temporalPath.path) && swift package generate-xcodeproj)")
+        bash.run(bash: "(cd \(temporalPath.path) && swift package generate-xcodeproj)")
         return temporalPath
     }
     
@@ -79,6 +85,16 @@ public final class PackageBuilder: PackageBuilding {
         try? storage.delete(at: temporalPathBuilder.getRootTemporalPath())
     }
     
+    private func createBasicPackage(path: URL, files: [URL], manifestTemplate: String) throws -> URL {
+        let temporalPath = try temporalPathBuilder.build(at: path)
+        try files.forEach { file in
+            let newFilePath = temporalPath.appendingPathComponent(file.lastPathComponent)
+            try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
+        }
+        try manifestBuilder.build(at: temporalPath, packageName: packageName, template: manifestTemplate)
+        return temporalPath
+    }
+    
     private func copyFilesBack(originalFiles: [URL], path: URL) throws {
         try originalFiles.forEach { file in
             let newFilePath = path.appendingPathComponent(file.lastPathComponent)
@@ -88,7 +104,7 @@ public final class PackageBuilder: PackageBuilding {
     
     private func createMainSwift(sourcesPath: URL, files: [URL]) throws {
         let fileNames = try files.map { try templateFilesManager.getTemplateNameFrom(url: $0) }
-        let mainContent = try templareRenderer.render(template: mainTemplate, context: ["podfiles": fileNames.joined(separator: ", ")])
+        let mainContent = try templateRenderer.render(template: mainFileWithCommandsTemplate, context: ["podfiles": fileNames.joined(separator: ", ")])
         try storage.saveFile(name: "main.swift", path: sourcesPath, content: mainContent, overwrite: true)
     }
     

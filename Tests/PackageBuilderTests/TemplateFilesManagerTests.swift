@@ -42,7 +42,9 @@ final class TemplateFilesManagerTests: XCTestCase {
 
 
     static var allTests = [
-        ("testCopiesTemplate", testCopiesTemplate)
+        ("testCopiesTemplate", testCopiesTemplate),
+        ("testRestoresTemplate", testRestoresTemplate),
+        ("testGetsTemplateNameFromFile", testGetsTemplateNameFromFile)
     ]
 }
 
