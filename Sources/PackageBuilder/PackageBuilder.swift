@@ -38,27 +38,23 @@ public final class PackageBuilder: PackageBuilding {
     @discardableResult
     public func build(from path: URL, files: [URL]) throws -> URL {
         let temporalPath = try temporalPathBuilder.build(at: path)
-        let sourcesPath = temporalPath.appendingPathComponent("Sources/").appendingPathComponent("\(packageName)/")
-        try createSourcesPath(sourcesPath: sourcesPath)
         try files.forEach { file in
-            let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
+            let newFilePath = temporalPath.appendingPathComponent(file.lastPathComponent)
             try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
         }
         try manifestBuilder.build(at: temporalPath, packageName: packageName, includingCommandDependencies: true)
-        try createMainSwift(sourcesPath: sourcesPath, files: files)
+        try createMainSwift(sourcesPath: temporalPath, files: files)
         return temporalPath
     }
     
     public func buildProject(from path: URL, files: [URL]) throws -> URL {
         let temporalPath = try temporalPathBuilder.build(at: path)
-        let sourcesPath = temporalPath.appendingPathComponent("Sources/").appendingPathComponent("\(packageName)/")
-        try createSourcesPath(sourcesPath: sourcesPath)
         try files.forEach { file in
-            let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
+            let newFilePath = temporalPath.appendingPathComponent(file.lastPathComponent)
             try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
         }
         try manifestBuilder.build(at: temporalPath, packageName: packageName, includingCommandDependencies: false)
-        try createEmptyMainSwift(sourcesPath: sourcesPath, files: files)
+        try createEmptyMainSwift(sourcesPath: temporalPath, files: files)
         print("Generating temporal project. This may take a few seconds...\n")
         run(bash: "(cd \(temporalPath.path) && swift package generate-xcodeproj)")
         return temporalPath
@@ -74,15 +70,10 @@ public final class PackageBuilder: PackageBuilding {
     }
     
     private func copyFilesBack(originalFiles: [URL], path: URL) throws {
-        let sourcesPath = path.appendingPathComponent("Sources/").appendingPathComponent("\(packageName)/")
         try originalFiles.forEach { file in
-            let newFilePath = sourcesPath.appendingPathComponent(file.lastPathComponent)
+            let newFilePath = path.appendingPathComponent(file.lastPathComponent)
             try templateFilesManager.restoreTemplate(from: newFilePath, to: file)
         }
-    }
-    
-    private func createSourcesPath(sourcesPath: URL) throws {
-        try storage.createFolder(at: sourcesPath)
     }
     
     private func createMainSwift(sourcesPath: URL, files: [URL]) throws {

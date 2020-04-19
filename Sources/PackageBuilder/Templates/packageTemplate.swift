@@ -20,7 +20,9 @@ let package = Package(
                 "ArgumentParser",
                 "SwiftyPodsDSL",
                 "PodfileBuilder"
-            ])
+            ],
+            path: ""
+        )
     ]
 )
 

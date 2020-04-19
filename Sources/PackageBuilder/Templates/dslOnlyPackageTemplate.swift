@@ -16,8 +16,9 @@ let package = Package(
             name: "{{packageName}}",
             dependencies: [
                 "SwiftyPodsDSL"
-        ])
+            ],
+            path: ""
+        )
     ]
 )
-
 """
