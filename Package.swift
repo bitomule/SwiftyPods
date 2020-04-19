@@ -56,6 +56,13 @@ let package = Package(
                 "Storage"
         ]),
         .testTarget(
+            name: "PackageBuilderTests",
+            dependencies: [
+                "TemplateRenderer",
+                "Storage",
+                "PackageBuilder"
+        ]),
+        .testTarget(
             name: "SwiftyPodsTests",
             dependencies: [
                 "SwiftyPods"

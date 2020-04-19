@@ -52,7 +52,7 @@ public final class PackageBuilder: PackageBuilding {
             let newFilePath = temporalPath.appendingPathComponent(file.lastPathComponent)
             try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
         }
-        try manifestBuilder.build(at: temporalPath, packageName: packageName, includingCommandDependencies: true)
+        try manifestBuilder.build(at: temporalPath, packageName: packageName, template: packageTemplate)
         try createMainSwift(sourcesPath: temporalPath, files: files)
         return temporalPath
     }
@@ -63,7 +63,7 @@ public final class PackageBuilder: PackageBuilding {
             let newFilePath = temporalPath.appendingPathComponent(file.lastPathComponent)
             try templateFilesManager.copyTemplate(from: file, to: newFilePath, override: false)
         }
-        try manifestBuilder.build(at: temporalPath, packageName: packageName, includingCommandDependencies: false)
+        try manifestBuilder.build(at: temporalPath, packageName: packageName, template: dslOnlyPackage)
         try createEmptyMainSwift(sourcesPath: temporalPath, files: files)
         print("Generating temporal project. This may take a few seconds...\n")
         run(bash: "(cd \(temporalPath.path) && swift package generate-xcodeproj)")
