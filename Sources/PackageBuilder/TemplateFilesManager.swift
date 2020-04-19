@@ -38,7 +38,7 @@ final class TemplateFilesManager: TemplateFilesCoping {
     }
     
     private func findNameForFile(at url: URL) throws -> String {
-        let content = try String(contentsOf: url)
+        let content = try storage.getFile(at: url)
         return try getNameFromContent(content: content) ?? Constant.defaultFileName
     }
     
