@@ -2,7 +2,7 @@ import Foundation
 import TemplateRenderer
 import Storage
 
-public protocol PackageManifestBuilding {
+protocol PackageManifestBuilding {
     func build(at path: URL, packageName: String, includingCommandDependencies: Bool) throws
 }
 
@@ -12,15 +12,21 @@ public final class PackageManifestBuilder: PackageManifestBuilding {
     }
     private let templateRenderer: TemplateRendering
     private let storage: FileSysteming
+    private let templateWithCommandDependencies: String
+    private let templateWithoutCommandDependencies: String
     
-    public init(templateRenderer: TemplateRendering = TemplateRenderer(),
-                storage: FileSysteming = FileSystem()) {
+    init(templateRenderer: TemplateRendering = TemplateRenderer(),
+                storage: FileSysteming = FileSystem(),
+                templateWithCommandDependencies: String = packageTemplate,
+                templateWithoutCommandDependencies: String = dslOnlyPackage) {
         self.templateRenderer = templateRenderer
         self.storage = storage
+        self.templateWithCommandDependencies = templateWithCommandDependencies
+        self.templateWithoutCommandDependencies = templateWithoutCommandDependencies
     }
     
-    public func build(at path: URL, packageName: String, includingCommandDependencies: Bool) throws {
-        let template = includingCommandDependencies ? packageTemplate : dslOnlyPackage
+    func build(at path: URL, packageName: String, includingCommandDependencies: Bool) throws {
+        let template = includingCommandDependencies ? templateWithCommandDependencies : templateWithoutCommandDependencies
         let content = try templateRenderer.render(template: template, context: ["packageName": packageName])
         try storage.saveFile(name: Constant.packageFileName, path: path, content: content, overwrite: true)
     }

@@ -19,12 +19,22 @@ public final class PackageBuilder: PackageBuilding {
     private let storage: FileSysteming
     private let packageName: String
     
-    public init(
-        temporalPathBuilder: TemporalPathBuilding = TemporalPathBuilder(),
-        manifestBuilder: PackageManifestBuilding = PackageManifestBuilder(),
-        templateFilesManager: TemplateFilesCoping = TemplateFilesManager(),
-        templareRenderer: TemplateRendering = TemplateRenderer(),
-        storage: FileSysteming = FileSystem(),
+    public convenience init(packageName: String) {
+        self.init(
+            temporalPathBuilder: TemporalPathBuilder(),
+            manifestBuilder: PackageManifestBuilder(),
+            templateFilesManager: TemplateFilesManager(),
+            templareRenderer: TemplateRenderer(),
+            storage: FileSystem(),
+            packageName: packageName)
+    }
+    
+    init(
+        temporalPathBuilder: TemporalPathBuilding,
+        manifestBuilder: PackageManifestBuilding,
+        templateFilesManager: TemplateFilesCoping,
+        templareRenderer: TemplateRendering,
+        storage: FileSysteming,
         packageName: String
     ) {
         self.temporalPathBuilder = temporalPathBuilder

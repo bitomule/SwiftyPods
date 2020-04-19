@@ -1,13 +1,13 @@
 import Foundation
 import Storage
 
-public protocol TemplateFilesCoping {
+protocol TemplateFilesCoping {
     func copyTemplate(from: URL, to: URL, override: Bool) throws
     func restoreTemplate(from: URL, to: URL) throws
     func getTemplateNameFrom(url: URL) throws -> String
 }
 
-public final class TemplateFilesManager: TemplateFilesCoping {
+final class TemplateFilesManager: TemplateFilesCoping {
     enum Constant {
         static let defaultFileName = "podfile"
         static let fileExtension = ".swift"
@@ -15,19 +15,19 @@ public final class TemplateFilesManager: TemplateFilesCoping {
     
     private let storage: FileSysteming
     
-    public init (storage: FileSysteming = FileSystem()) {
+    init (storage: FileSysteming = FileSystem()) {
         self.storage = storage
     }
     
-    public func copyTemplate(from: URL, to: URL, override: Bool) throws {
+    func copyTemplate(from: URL, to: URL, override: Bool) throws {
         try storage.copyFile(from: from, to: buildTemplateURLFromPropertyName(url: to, originalFile: from), override: override)
     }
     
-    public func restoreTemplate(from: URL, to: URL) throws {
+    func restoreTemplate(from: URL, to: URL) throws {
         try storage.copyFile(from: buildTemplateURLFromPropertyName(url: from, originalFile: to), to: to, override: true)
     }
     
-    public func getTemplateNameFrom(url: URL) throws -> String {
+    func getTemplateNameFrom(url: URL) throws -> String {
         try findNameForFile(at: url)
     }
     
