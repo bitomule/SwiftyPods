@@ -34,7 +34,7 @@ final class GenerateService {
         print("Generating podfile\n")
         if let template = template {
             let templatePath = URL(fileURLWithPath: template)
-            try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) \(URL(fileURLWithPath: "", isDirectory: true).path) --template-path \"\(templatePath.absoluteString)\")")
+            try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) \(URL(fileURLWithPath: "", isDirectory: true).path) --template-path \"\(templatePath.path)\")")
         } else {
             try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) \(URL(fileURLWithPath: "", isDirectory: true).path))")
         }
