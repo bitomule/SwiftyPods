@@ -1,10 +1,9 @@
-let mainTemplate = """
 import Foundation
 import ArgumentParser
 import SwiftyPodsDSL
 import PodfileBuilder
 
-let podfiles = [{{podfiles}}]
+let podfiles = [example]
 
 struct Generate: ParsableCommand {
     public static let configuration = CommandConfiguration(abstract: "Generate podfile")
@@ -18,5 +17,3 @@ struct Generate: ParsableCommand {
 }
 
 Generate.main()
-"""
-
