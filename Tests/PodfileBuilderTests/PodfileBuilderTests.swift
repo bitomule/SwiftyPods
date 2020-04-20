@@ -21,6 +21,23 @@ final class PodfileBuilderTests: XCTestCase {
         XCTAssertEqual(templateRenderMock.renderArguments!.context["pods"], "")
         XCTAssertEqual(templateRenderMock.renderArguments!.template, defaultTemplate)
     }
+    
+    func testSavesGeneratedPodfileFromFile() throws {
+        let fileSystemMock = FileSystemMock()
+        let fileTemplate = "fileTemplate{{pods}}"
+        fileSystemMock.getFile = fileTemplate
+        let templateRenderMock = TemplateRenderingMock()
+        let defaultTemplate = "content{{pods}}"
+        podfileBuilder = PodfileBuilder(templateRenderer: templateRenderMock, storage: fileSystemMock, defaultTemplate: defaultTemplate)
+        
+        try podfileBuilder.buildPodfile(podfiles: [], path: "path", templatePath: "path")
+        
+        XCTAssertNotNil(fileSystemMock.saveFileArguments)
+        XCTAssertNotNil(templateRenderMock.renderArguments)
+        XCTAssertEqual(fileSystemMock.saveFileArguments!.name, "podfile")
+        XCTAssertEqual(templateRenderMock.renderArguments!.context["pods"], "")
+        XCTAssertEqual(templateRenderMock.renderArguments!.template, fileTemplate)
+    }
 
     static var allTests = [
         ("testSavesGeneratedEmptyPodfile", testSavesGeneratedEmptyPodfile)
@@ -38,12 +55,14 @@ private final class FileSystemMock: FileSysteming {
     }
     var saveFileArguments: SaveFileArguments?
     
+    var getFile: String?
+    
     func saveFile(name: String, path: URL, content: String, overwrite: Bool) throws {
         saveFileArguments = SaveFileArguments(name: name, path: path, content: content, overwrite: overwrite)
     }
     
     func getFile(at: URL) throws -> String {
-        fatalError()
+        getFile ?? ""
     }
     
     func copyFile(from: URL, to: URL, override: Bool) throws {

@@ -24,14 +24,19 @@ public final class PodfileBuilder {
         self.defaultTemplate = defaultTemplate
     }
     
-    public func buildPodfile(podfiles: [Podfile], path: String) throws {
+    public func buildPodfile(podfiles: [Podfile], path: String, templatePath: String? = nil) throws {
         let url = URL(fileURLWithPath: path, isDirectory: true)
         let lines = dependenciesLines(from: podfiles)
         let template = try templateRenderer.render(
-            template: defaultTemplate,
+            template: try loadTemplateFromPath(templatePath) ?? defaultTemplate,
             context: lines
         )
         try storage.saveFile(name: "podfile", path: url, content: template, overwrite: true)
+    }
+    
+    private func loadTemplateFromPath(_ path: String?) throws -> String? {
+        guard let path = path else { return nil }
+        return try storage.getFile(at: URL(fileURLWithPath: path))
     }
     
     private func dependenciesLines(from podfiles: [Podfile]) -> [String: String] {

@@ -11,9 +11,12 @@ struct Generate: ParsableCommand {
 
     @Argument(help: "Path where podfile will be generated")
     private var path: String
+
+    @Option(name: .shortAndLong, default: nil, help: "Optional path to template file")
+    private var templatePath: String?
         
     func run() throws {
-        try PodfileBuilder().buildPodfile(podfiles: podfiles, path: path)
+        try PodfileBuilder().buildPodfile(podfiles: podfiles, path: path, templatePath: templatePath)
     }
 }
 

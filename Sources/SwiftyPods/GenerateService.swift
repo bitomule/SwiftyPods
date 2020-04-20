@@ -20,18 +20,22 @@ final class GenerateService {
         self.templatesLocator = templatesLocator
     }
     
-    func run(template: String) throws {
+    func run(template: String?) throws {
         packageBuilder.clean()
         let baseUrl = URL(fileURLWithPath: "", isDirectory: true)
         let files = try templatesLocator.findTemplates(at: baseUrl)
         let url = try packageBuilder.build(from: baseUrl, files: files)
-        try generate(url: url)
+        try generate(url: url, template: template)
         print("Cleaning")
         try packageBuilder.finish(originalFiles: files, path: url)
     }
     
-    private func generate(url: URL) throws {
+    private func generate(url: URL, template: String?) throws {
         print("Generating podfile\n")
-        try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) \(URL(fileURLWithPath: "", isDirectory: true).path))")
+        if let template = template {
+            try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) \(URL(fileURLWithPath: "", isDirectory: true).path)) --templatePath \(template)")
+        } else {
+            try main.runAndPrint(bash: "(cd \(url.path) && swift run \(Constant.packageName) \(URL(fileURLWithPath: "", isDirectory: true).path))")
+        }
     }
  }
