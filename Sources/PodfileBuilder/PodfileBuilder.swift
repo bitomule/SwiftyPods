@@ -9,20 +9,29 @@ public final class PodfileBuilder {
     }
     
     private let templateRenderer: TemplateRendering
+    private let storage: FileSysteming
+    private let defaultTemplate: String
     
-    public init(templateRenderer: TemplateRendering = TemplateRenderer()) {
+    public convenience init() {
+        self.init(templateRenderer: TemplateRenderer(), storage: FileSystem(), defaultTemplate: podfileTemplate)
+    }
+    
+    init(templateRenderer: TemplateRendering,
+                storage: FileSysteming,
+                defaultTemplate: String) {
         self.templateRenderer = templateRenderer
+        self.storage = storage
+        self.defaultTemplate = defaultTemplate
     }
     
     public func buildPodfile(podfiles: [Podfile], path: String) throws {
-        // Check folder exists
         let url = URL(fileURLWithPath: path, isDirectory: true)
         let lines = dependenciesLines(from: podfiles)
-        let template = try TemplateRenderer().render(
-            template: podfileTemplate,
+        let template = try templateRenderer.render(
+            template: defaultTemplate,
             context: lines
         )
-        try FileSystem().saveFile(name: "podfile", path: url, content: template, overwrite: true)
+        try storage.saveFile(name: "podfile", path: url, content: template, overwrite: true)
     }
     
     private func dependenciesLines(from podfiles: [Podfile]) -> [String: String] {

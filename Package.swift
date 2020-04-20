@@ -63,6 +63,13 @@ let package = Package(
                 "PackageBuilder"
         ]),
         .testTarget(
+            name: "PodfileBuilderTests",
+            dependencies: [
+                "TemplateRenderer",
+                "Storage",
+                "PodfileBuilder"
+        ]),
+        .testTarget(
             name: "SwiftyPodsTests",
             dependencies: [
                 "SwiftyPods"
