@@ -1,15 +1,16 @@
 import Foundation
+import Storage
 
 class TemplateArgumentParser {
-    private let manager: FileManager
+    private let storage: FileSysteming
     
-    init(manager: FileManager = FileManager.default) {
-        self.manager = manager
+    init(storage: FileSysteming = FileSystem()) {
+        self.storage = storage
     }
     
     func getTemplateName(template: String) -> URL? {
         let templateURL = URL(fileURLWithPath: template)
-        guard templateURL.isFileURL, manager.fileExists(atPath: templateURL.relativeString) else {
+        guard storage.fileExists(at: templateURL) else {
             return nil
         }
         return templateURL

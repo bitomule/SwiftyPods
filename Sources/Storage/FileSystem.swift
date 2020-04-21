@@ -11,6 +11,7 @@ public protocol FileSysteming {
     func delete(at path: String) throws
     func createFolder(at url:URL) throws
     func findFilesInFolder(at url: URL, matching: (URL) -> Bool) throws -> [URL]
+    func fileExists(at url: URL) -> Bool
 }
 
 public final class FileSystem: FileSysteming {
@@ -63,5 +64,9 @@ public final class FileSystem: FileSysteming {
                 return !(resourceValues.isDirectory ?? true)
         }
         .filter(matching) ?? []
+    }
+    
+    public func fileExists(at url: URL) -> Bool {
+        manager.fileExists(atPath: url.path)
     }
 }

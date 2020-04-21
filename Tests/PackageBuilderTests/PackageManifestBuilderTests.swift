@@ -79,4 +79,8 @@ private final class FileSystemMock: FileSysteming {
     func findFilesInFolder(at url: URL, matching: (URL) -> Bool) throws -> [URL] {
         []
     }
+    
+    func fileExists(at url: URL) -> Bool {
+        false
+    }
 }
