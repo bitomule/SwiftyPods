@@ -1,4 +1,5 @@
 import Foundation
+import Storage
 
 protocol TemplateLocating {
     func findTemplates(at path: URL) throws -> [URL]
@@ -9,21 +10,13 @@ final class TemplateLocator: TemplateLocating {
         static let templateName = "podfile.swift"
     }
     
-    private let manager: FileManager
+    private let storage: FileSysteming
     
-    init(manager: FileManager = FileManager.default) {
-        self.manager = manager
+    init(storage: FileSysteming = FileSystem()) {
+        self.storage = storage
     }
     
     func findTemplates(at path: URL) throws -> [URL] {
-        try manager
-            .enumerator(at: path, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles], errorHandler: nil)?
-            .allObjects
-            .map { $0 as! URL }
-            .filter { url in
-                let resourceValues = try url.resourceValues(forKeys: [.isDirectoryKey])
-                return !(resourceValues.isDirectory ?? true)
-            }
-            .filter { $0.lastPathComponent == Constant.templateName } ?? []
+        try storage.findFilesInFolder(at: path, matching: { $0.lastPathComponent == Constant.templateName })
     }
 }

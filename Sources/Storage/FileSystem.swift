@@ -10,6 +10,7 @@ public protocol FileSysteming {
     func copyFile(from: URL, to: URL, override: Bool) throws
     func delete(at path: String) throws
     func createFolder(at url:URL) throws
+    func findFilesInFolder(at url: URL, matching: (URL) -> Bool) throws -> [URL]
 }
 
 public final class FileSystem: FileSysteming {
@@ -50,5 +51,17 @@ public final class FileSystem: FileSysteming {
     
     public func createFolder(at url: URL) throws {
         try manager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
+    }
+    
+    public func findFilesInFolder(at url: URL, matching: (URL) -> Bool) throws -> [URL] {
+        try manager
+            .enumerator(at: url, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles], errorHandler: nil)?
+            .allObjects
+            .map { $0 as! URL }
+            .filter { url in
+                let resourceValues = try url.resourceValues(forKeys: [.isDirectoryKey])
+                return !(resourceValues.isDirectory ?? true)
+        }
+        .filter(matching) ?? []
     }
 }
