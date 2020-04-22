@@ -22,7 +22,7 @@ SwiftyPods enables two big features:
 * **Safety**: Swift will type check your file before you finish editing it.
 * **Modularization of your podfile**: You can split your podfile in multiple podfile.swift files. You choose: feature pods, module pods, team pods... Once you generate your podfile they will all get merged into a single, classic podfile.
 
-### This is what your poºdfile.swift will look like
+### This is what your podfile.swift will look like
 
 ```swift
 let podfile = Podfile(
