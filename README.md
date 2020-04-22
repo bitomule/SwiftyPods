@@ -16,13 +16,13 @@ SwiftyPods is a command-line tool that allows you to generate your CocoaPods pod
 
 ## Motivation
 
-When your project based on CocoaPods grows reading and editing the podfile becomes impossible. You start grouping using variables and comments but it's still a long file where the safety is the error you get when you run pod install. 
+Reading and editing the podfile becomes impossible when your project based on CocoaPods grows. You start grouping using variables and comments but it's still a long file where the safety is the error you get when you run pod install. 
 
 SwiftyPods enables two big features:
 * **Safety**: Swift will type check your file before you finish editing it.
 * **Modularization of your podfile**: You can split your podfile in multiple podfile.swift files. You choose: feature pods, module pods, team pods... Once you generate your podfile they will all get merged into a single, classic podfile.
 
-### This is what your podfile.swift will look like
+### This is what your poºdfile.swift will look like
 
 ```swift
 let podfile = Podfile(
@@ -99,7 +99,7 @@ This command will:
 
 Once the project is opened you can edit your files content.
 
-When you have finished editing just close the Xcode project, go back to terminal and press any key. This will copy your templates back to original locations and delete temporal folder. Keep in mind that SwiftyPods has to copy edited files back to original locations. If you don't complete the terminal process your podfiles won't be updated.
+When you have finished editing just close the Xcode project, go back to terminal and press any key. This will copy your templates back to original locations and delete temporal folder. Keep in mind that SwiftyPods has to copy edited files back to original locations. If you don't complete the terminal process, your podfiles won't be updated.
 
 ### Generating podfile
 
