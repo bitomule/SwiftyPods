@@ -19,8 +19,8 @@ SwiftyPods is a command-line tool that allows you to generate your CocoaPods pod
 When your project based on CocoaPods grows reading and editing the podfile becomes imposible. You start grouping using variables and comments but it's still a long file where the safety is the error you get when you run pod install. 
 
 SwiftyPods enables two big features:
-* Safety: Swift will type check your file before you finish editing it.
-* Modularization of your podfile: You can split your podfile in multiple podfile.swift files. You choose: feature pods, module pods, team pods... Once you generate your podfile they will all get merged into a single, clasic podfile.
+* **Safety**: Swift will type check your file before you finish editing it.
+* **Modularization of your podfile**: You can split your podfile in multiple podfile.swift files. You choose: feature pods, module pods, team pods... Once you generate your podfile they will all get merged into a single, clasic podfile.
 
 ### This is what your podfile.swift will look like
 
