@@ -22,27 +22,64 @@ SwiftyPods enables two big features:
 * Safety: Swift will type check your file before you finish editing it.
 * Modularization of your podfile: You can split your podfile in multiple podfile.swift files. You choose: feature pods, module pods, team pods... Once you generate your podfile they will all get merged into a single, clasic podfile.
 
+### This is what your podfile.swift will look like
+
+```swift
+let podfile = Podfile(
+    targets: [
+        .target(
+            name: "Target",
+            project: "Project",
+            dependencies: [
+                .dependency(name: "Dependency1"),
+                .dependency(name: "Dependency2",
+                            version: "1.2.3"),
+                .dependency(name: "Dependency3",
+                            .git(url: "repo"),
+                            .branch(name: "master"))
+            ],
+            childTargets: [
+                .target(name: "ChildTarget", project: "Project2")
+            ]
+        )
+    ]
+)
+```
+
 ## Installing
 
-### Using homebrew
+### Using [Homebrew](http://brew.sh/)
 
-### Using Mint
+```sh
+$ brew install bitomule/homebrew-tap/pecker
+```
+
+### Using [Mint](https://github.com/yonaskolb/mint)
+
+```sh
+$ mint install bitomule/swiftypods
+```
 ### Compiling from source
 
+```sh
+$ git clone https://github.com/woshiccm/Pecker.git
+$ cd Pecker
+$ make install
+```
 
 ## Usage
 ### Create your first empty podfile
 
 You can create an empty podfile.swift using the create command:
 
-```
-swiftypods create
+```sh
+$ swiftypods create
 ```
 
 It takes an optional path parameter that you can use to create your podfile at an specific location:
 
-```
-swiftypods create --path "path/to/folder"
+```sh
+$ swiftypods create --path "path/to/folder"
 ```
 
 Once the file is created you can jump directly to editing.
@@ -56,8 +93,9 @@ You can always open your podfile.swift and edit it but declaring a podfile in Sw
 #### Edit your podfile.swift files
 
 In order to get this two magical features you have to use the edit command:
-```
-swiftypods edit
+
+```sh
+$ swiftypods edit
 ```
 
 This command will:
@@ -73,14 +111,14 @@ When you have finished editing just close the Xcode project, go back to terminal
 
 In order to generate your podfile just run:
 
-```
-swiftypods generate
+```sh
+$ swiftypods generate
 ```
 
 By default it will use an almost empty podfile template but you can use your own template using:
 
-```
-swiftypods generate --template "templateLocation"
+```sh
+$ swiftypods generate --template "templateLocation"
 ```
 
 The only thing your template needs to follow is adding {{pods}} where you want your dependencies to get generated. Base podfile template is:
