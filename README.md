@@ -25,12 +25,27 @@ SwiftyPods enables two big features:
 ## Installing
 
 ### Using homebrew
+
 ### Using Mint
 ### Compiling from source
 
 
 ## Usage
 ### Create your first empty podfile
+
+You can create an empty podfile.swift using the create command:
+
+```
+swiftypods create
+```
+
+It takes an optional path parameter that you can use to create your podfile at an specific location:
+
+```
+swiftypods create --path "path/to/folder"
+```
+
+Once the file is created you can jump directly to editing.
 
 ### Editing
 
@@ -52,7 +67,7 @@ This command will:
 
 Once the project is opened you can edit your files content.
 
-When you have finished editing just close the Xcode project, go back to terminal and press any key. This will copy your templates back to original locations and delete temporal folder.
+When you have finished editing just close the Xcode project, go back to terminal and press any key. This will copy your templates back to original locations and delete temporal folder. Keep in mind that SwiftyPods has to copy edited files back to original locations. If you don't complete the terminal process your podfiles won't be updated.
 
 ### Generating podfile
 
