@@ -16,11 +16,11 @@ SwiftyPods is a command-line tool that allows you to generate your CocoaPods pod
 
 ## Motivation
 
-When your project based on CocoaPods grows reading and editing the podfile becomes imposible. You start grouping using variables and comments but it's still a long file where the safety is the error you get when you run pod install. 
+When your project based on CocoaPods grows reading and editing the podfile becomes impossible. You start grouping using variables and comments but it's still a long file where the safety is the error you get when you run pod install. 
 
 SwiftyPods enables two big features:
 * **Safety**: Swift will type check your file before you finish editing it.
-* **Modularization of your podfile**: You can split your podfile in multiple podfile.swift files. You choose: feature pods, module pods, team pods... Once you generate your podfile they will all get merged into a single, clasic podfile.
+* **Modularization of your podfile**: You can split your podfile in multiple podfile.swift files. You choose: feature pods, module pods, team pods... Once you generate your podfile they will all get merged into a single, classic podfile.
 
 ### This is what your podfile.swift will look like
 
@@ -51,7 +51,7 @@ let podfile = Podfile(
 ### Using [Homebrew](http://brew.sh/)
 
 ```sh
-$ brew install bitomule/homebrew-tap/pecker
+$ brew install bitomule/homebrew-tap/swiftypods
 ```
 
 ### Using [Mint](https://github.com/yonaskolb/mint)
@@ -62,8 +62,8 @@ $ mint install bitomule/swiftypods
 ### Compiling from source
 
 ```sh
-$ git clone https://github.com/woshiccm/Pecker.git
-$ cd Pecker
+$ git clone https://github.com/bitomule/SwiftyPods.git
+$ cd SwiftyPods
 $ make install
 ```
 
@@ -86,13 +86,7 @@ Once the file is created you can jump directly to editing.
 
 ### Editing
 
-You can always open your podfile.swift and edit it but declaring a podfile in Swift also means:
-* Safety
-* Autocomplete
-
-#### Edit your podfile.swift files
-
-In order to get this two magical features you have to use the edit command:
+You can open your podfile.swift anytime and edit it, but if you want to use the power of the Swift compiler and autocomplete use:
 
 ```sh
 $ swiftypods edit
