@@ -5,7 +5,8 @@ struct SwiftyPods: ParsableCommand {
         abstract: "A Swift command-line tool to manage podfile",
         subcommands: [
             Generate.self,
-            Edit.self
+            Edit.self,
+            Create.self
     ])
 
     init() { }
